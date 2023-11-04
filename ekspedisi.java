@@ -11,9 +11,9 @@ public class ekspedisi {
 
         while (!berhasilLogin) {
             System.out.print("Masukkan nama pengguna: ");
-            String inputUsername = userInput.nextLine();
+            String inputUsername = scan.nextLine();
             System.out.print("Masukkan kata sandi: ");
-            String inputPassword = userInput.nextLine();
+            String inputPassword = scan.nextLine();
 
             if (inputUsername.equals(username) && inputPassword.equals(password)) {
                 System.out.println("Selamat datang, " + username + "!");
