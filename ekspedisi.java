@@ -6,16 +6,20 @@ public class ekspedisi {
         var clearScreen = ("\033[H\033[2J");
         System.out.println(clearScreen);
         
-        String pilih;
+        String pilih, asal, tujuan, kota, layanan;
+        boolean berhasilLogin = false;
+        int biaya, berat, panjang, lebar, tinggi, jenLay, beratVolume, counter;
         String[][] user = new String[1][2];
         user[0][0] = "admin";
         user[0][1] = "admin";
-        boolean berhasilLogin = false;
-
-        String kotaAsal, kotaTujuan;
-        int biaya, berat, panjang, lebar, tinggi;
-        double volume = 0;
-
+        String[][] identitas = new String[8][2];
+        String[] kotaDikirim = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
+        String[] kotaDiterima = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
+        String[] barangString = new String[2];
+        int[] barangInt = new int[5];
+        int metodePembayaran;
+        boolean pembayaranValid = false;
+        
         while (true) {
             System.out.println("Login");
             System.out.println("1. Sign in");
@@ -58,7 +62,6 @@ public class ekspedisi {
                 if (pilih.equals("1")) {
                     System.out.println(clearScreen);
                     System.out.println("Silahkan masukkan informasi pengiriman");
-                    String[][] identitas = new String[8][2];
                     //untuk informasi identitas pengirim dan penerima
                     System.out.println ("1. Masukkan informasi pengirim (Informasi tidak boleh kosong!)");
                     while (true){
@@ -73,8 +76,6 @@ public class ekspedisi {
                         identitas [3][0] = input.nextLine();
                         
                         //khusus untuk kota
-                        String kota;
-                        String[] kotaDiterima = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
                         while (true) {
                             System.out.print("Kota (Malang/Surabaya/Jakarta/Madiun/Jember): ");
                             kota = input.nextLine();
@@ -105,13 +106,13 @@ public class ekspedisi {
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("n")) {
                             break;
+                            }
                         }
-                    }
-                    System.out.println("=============================");
-                    System.out.println("=============================");
+                        System.out.println("=============================");
+                        System.out.println("=============================");
                     
-                    System.out.println ("2. Masukkan informasi penerima(Informasi tidak boleh kosong!)");
-                    while (true){
+                        System.out.println ("2. Masukkan informasi penerima(Informasi tidak boleh kosong!)");
+                        while (true){
                         //input informasi penerima
                         System.out.print("Nama penerima: ");
                         identitas [0][1] = input.nextLine();
@@ -124,8 +125,6 @@ public class ekspedisi {
                         identitas [3][1] = input.nextLine();
                         
                         //khusus untuk kota
-                        String kota;
-                        String[] kotaDiterima = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
                         while (true) {
                             System.out.print("Kota (Malang/Surabaya/Jakarta/Madiun/Jember): ");
                             kota = input.nextLine();
@@ -156,16 +155,14 @@ public class ekspedisi {
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("n")) {
                             break;
+                            }
                         }
-                    }
-                    System.out.println("=============================");
-                    System.out.println("=============================");
+                        System.out.println("=============================");
+                        System.out.println("=============================");
                     
-                    String[] barangString = new String[2];
-                    int[] barangInt = new int[5];
-                    //untuk informasi barang yang dikirim
-                    System.out.println ("3. Masukkan informasi barang (Informasi tidak boleh kosong!)");
-                    while (true) {
+                        //untuk informasi barang yang dikirim
+                        System.out.println ("3. Masukkan informasi barang (Informasi tidak boleh kosong!)");
+                        while (true) {
                         //input informasi barang
                         System.out.print("Nama barang: ");
                         barangString[0] = input.nextLine();
@@ -188,15 +185,13 @@ public class ekspedisi {
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("n")) {
                             break;
+                            }
                         }
-                    }
                     
-                    System.out.println("=============================");
-                    System.out.println("=============================");
-                    // Pemilihan jenis layanan
-                    int jenLay;
-                    String layanan;
-                    while (true) {
+                        System.out.println("=============================");
+                        System.out.println("=============================");
+                        // Pemilihan jenis layanan
+                        while (true) {
                         System.out.print("Pilih jenis layanan pengiriman (Standard/Reguler/Express): ");
                         layanan = input.nextLine();
                         if (layanan.equalsIgnoreCase("Standard")) {
@@ -208,53 +203,51 @@ public class ekspedisi {
                         } else {
                             System.out.println("Jenis layanan tidak valid!");
                             continue; // Mengulangi loop jika jenis layanan tidak valid
+                            }
                         }
-                    }
                     
-                    // Perhitungan biaya (berdasarkan jenLay + berat)
-                    int beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
+                        // Perhitungan biaya (berdasarkan jenLay + berat)
+                        beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
                     
-                    if (beratVolume > barangInt[1]) {
+                        if (beratVolume > barangInt[1]) {
                         biaya = (10000 * beratVolume) + (jenLay * 10);
                         if (!identitas[5][0].equalsIgnoreCase(identitas[5][1])) {
                             // Jika beda provinsi
                             biaya += 5000;
-                        }
-                    } else {
+                            }
+                        } else {
                         biaya = (10000 * barangInt[1]) + (jenLay * 10);
                         if (!identitas[5][0].equalsIgnoreCase(identitas[5][1])) {
                             // Jika beda provinsi
                             biaya += 5000;
+                            }
                         }
-                    }
-                    System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya+5000));
-                    //pembayaran
-                    int metodePembayaran;
-                    boolean pembayaranValid;
+                        System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya+5000));
+                        //pembayaran
                     
-                    do {
+                        do {
                         System.out.print("Ingin melanjutkan pembayaran? (y/n): ");
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("y")) {
                             break;
-                        }
-                    } while (true);
+                            }
+                        } while (true);
                     
-                    System.out.println("=============================");
-                    System.out.println("=============================");
-                    
-                    do {
+                        System.out.println("=============================");
+                        System.out.println("=============================");
+                        
+                        do {
                         System.out.println("Pilihan Pembayaran:");
                         System.out.println("1. COD (Cash On Delivery)");
                         System.out.println("2. Transfer Bank");
                         System.out.print("Pilih metode pembayaran (1/2): ");
                         metodePembayaran = input.nextInt();
                         
-                        if (metodePembayaran == 1) {
+                            if (metodePembayaran == 1) {
                             // Pembayaran menggunakan COD
                             System.out.println("Anda memilih pembayaran COD. Biaya pengiriman akan ditagihkan ke penerima.");
                             pembayaranValid = true;
-                        } else if (metodePembayaran == 2) {
+                            } else if (metodePembayaran == 2) {
                             // Pembayaran menggunakan Transfer Bank
                             input.nextLine();
                             System.out.print("Masukkan jenis Bank(BRI/BNI/others): ");
@@ -267,13 +260,13 @@ public class ekspedisi {
                             int cvv = input.nextInt();
                             pembayaranValid = true;
                             System.out.print("Pembayaran sukses!");
-                        } else {
+                            } else {
                             System.out.println("Metode pembayaran tidak valid!");
                             pembayaranValid = false;
-                        }
-                    } while (!pembayaranValid);
-                        
-                    //Informasi tanggal
+                            }
+                        } while (!pembayaranValid);
+
+                        //Informasi tanggal
                         System.out.println("=============================");
                         System.out.println("=============================");
                         System.out.println("Masukkan tanggal pick-up: ");
@@ -290,11 +283,10 @@ public class ekspedisi {
                         System.out.println("Nomor resi anda adalah: "+noResi);
                         //info pick up
                         System.out.println("Silahkan menunggu kurir untuk mengambil paket anda sampai "+(day+1)+"/"+month+"/"+year);
-                        
+                    
                 } else if (pilih.equals("2")) {
                     System.out.println(clearScreen);
                     System.out.println("Silahkan masukkan informasi pengiriman");
-                    String[][] identitas = new String[8][2];
                     //untuk informasi identitas pengirim dan penerima
                     System.out.println ("1. Masukkan informasi pengirim (Informasi tidak boleh kosong!)");
                     while (true){
@@ -309,8 +301,6 @@ public class ekspedisi {
                         identitas [3][0] = input.nextLine();
                         
                         //khusus untuk kota
-                        String kota;
-                        String[] kotaDiterima = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
                         while (true) {
                             System.out.print("Kota (Malang/Surabaya/Jakarta/Madiun/Jember): ");
                             kota = input.nextLine();
@@ -341,13 +331,13 @@ public class ekspedisi {
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("n")) {
                             break;
+                            }
                         }
-                    }
-                    System.out.println("=============================");
-                    System.out.println("=============================");
+                        System.out.println("=============================");
+                        System.out.println("=============================");
                     
-                    System.out.println ("2. Masukkan informasi penerima(Informasi tidak boleh kosong!)");
-                    while (true){
+                        System.out.println ("2. Masukkan informasi penerima(Informasi tidak boleh kosong!)");
+                        while (true){
                         //input informasi penerima
                         System.out.print("Nama penerima: ");
                         identitas [0][1] = input.nextLine();
@@ -360,8 +350,6 @@ public class ekspedisi {
                         identitas [3][1] = input.nextLine();
                         
                         //khusus untuk kota
-                        String kota;
-                        String[] kotaDiterima = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
                         while (true) {
                             System.out.print("Kota (Malang/Surabaya/Jakarta/Madiun/Jember): ");
                             kota = input.nextLine();
@@ -392,16 +380,14 @@ public class ekspedisi {
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("n")) {
                             break;
+                            }
                         }
-                    }
-                    System.out.println("=============================");
-                    System.out.println("=============================");
+                        System.out.println("=============================");
+                        System.out.println("=============================");
                     
-                    String[] barangString = new String[2];
-                    int[] barangInt = new int[5];
-                    //untuk informasi barang yang dikirim
-                    System.out.println ("3. Masukkan informasi barang (Informasi tidak boleh kosong!)");
-                    while (true) {
+                        //untuk informasi barang yang dikirim
+                        System.out.println ("3. Masukkan informasi barang (Informasi tidak boleh kosong!)");
+                        while (true) {
                         //input informasi barang
                         System.out.print("Nama barang: ");
                         barangString[0] = input.nextLine();
@@ -424,15 +410,13 @@ public class ekspedisi {
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("n")) {
                             break;
+                            }
                         }
-                    }
                     
-                    System.out.println("=============================");
-                    System.out.println("=============================");
-                    // Pemilihan jenis layanan
-                    int jenLay;
-                    String layanan;
-                    while (true) {
+                        System.out.println("=============================");
+                        System.out.println("=============================");
+                        // Pemilihan jenis layanan
+                        while (true) {
                         System.out.print("Pilih jenis layanan pengiriman (Standard/Reguler/Express): ");
                         layanan = input.nextLine();
                         if (layanan.equalsIgnoreCase("Standard")) {
@@ -444,42 +428,40 @@ public class ekspedisi {
                         } else {
                             System.out.println("Jenis layanan tidak valid!");
                             continue; // Mengulangi loop jika jenis layanan tidak valid
+                            }
                         }
-                    }
                     
-                    // Perhitungan biaya (berdasarkan jenLay + berat)
-                    int beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
+                        // Perhitungan biaya (berdasarkan jenLay + berat)
+                        beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
                     
-                    if (beratVolume > barangInt[1]) {
+                        if (beratVolume > barangInt[1]) {
                         biaya = (10000 * beratVolume) + (jenLay * 10);
                         if (!identitas[5][0].equalsIgnoreCase(identitas[5][1])) {
                             // Jika beda provinsi
                             biaya += 5000;
-                        }
-                    } else {
+                            }
+                        } else {
                         biaya = (10000 * barangInt[1]) + (jenLay * 10);
                         if (!identitas[5][0].equalsIgnoreCase(identitas[5][1])) {
                             // Jika beda provinsi
                             biaya += 5000;
+                            }
                         }
-                    }
-                    System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya));
-                    //pembayaran
-                    int metodePembayaran;
-                    boolean pembayaranValid;
+                        System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya));
+                        //pembayaran
                     
-                    do {
+                        do {
                         System.out.print("Ingin melanjutkan pembayaran? (y/n): ");
                         String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("y")) {
                             break;
-                        }
-                    } while (true);
+                            }
+                        } while (true);
                     
-                    System.out.println("=============================");
-                    System.out.println("=============================");
+                        System.out.println("=============================");
+                        System.out.println("=============================");
                     
-                    do {
+                        do {
                         System.out.println("Pilihan Pembayaran:");
                         System.out.println("1. COD (Cash On Delivery)");
                         System.out.println("2. Transfer Bank");
@@ -506,10 +488,10 @@ public class ekspedisi {
                         } else {
                             System.out.println("Metode pembayaran tidak valid!");
                             pembayaranValid = false;
-                        }
-                    } while (!pembayaranValid);
+                            }
+                        } while (!pembayaranValid);
                         
-                    //Informasi tanggal
+                        //Informasi tanggal
                         System.out.println("=============================");
                         System.out.println("=============================");
                         System.out.println("Masukkan tanggal drop-off: ");
@@ -528,57 +510,66 @@ public class ekspedisi {
                         System.out.println("Silahkan letakkan paket anda pada kantor cabang terdekat sampai "+(day+1)+"/"+month+"/"+year) ;
         
                 } else if (pilih.equals("3")) {
-                    while (berhasilLogin) {
-                        
-                        System.out.print("Masukan Kota Asal :");
-                        kotaAsal = input.nextLine();
-                        System.out.print("Masukan Kota Tujuan :");
-                        kotaTujuan = input.nextLine();
-                        System.out.print("Berat Paket :");
-                        berat = input.nextInt();
-                        System.out.println("Volume Paket");
-                        System.out.print("panjang :");
-                        panjang = input.nextInt();
-                        System.out.print("lebar :");
-                        lebar = input.nextInt();
-                        System.out.print("tinggi :");
-                        tinggi = input.nextInt();
-                        volume = (int) panjang*lebar*tinggi/6000;
+                        System.out.println("Asal(Provinsi):");
+                        asal = input.nextLine();
+                        System.out.println("Tujuan(Provinsi)");
+                        tujuan = input.nextLine();
 
-                        if (kotaAsal.equalsIgnoreCase("Malang") && kotaTujuan.equalsIgnoreCase("Surabaya")) {
-                            if (berat > volume) {
-                                biaya = 10000 * berat;
-                            }else
-                                biaya = 10000 * (int) volume;
-                            System.out.println(biaya);
-                            pilih = input.nextLine();
-                        }
-                        System.out.print("Kembali ke menu? (y/n) :");
-                        pilih = input.nextLine();
-                        if (pilih.equals("y")) {
-                            break;
-                        }
-                    }  
-                    System.out.println(clearScreen);
+                         System.out.print("Berat(kg): ");
+                        barangInt[1] = input.nextInt();
+                        System.out.println("Hitung berat volume");
+                        System.out.print("Panjang(cm): ");
+                        barangInt[2] = input.nextInt();
+                        System.out.print("Lebar(cm): ");
+                        barangInt[3] = input.nextInt();
+                        System.out.print("Tinggi(cm): ");
+                        barangInt[4] = input.nextInt();
 
+                            while (true) {
+                            System.out.print("Pilih jenis layanan pengiriman (Standard/Reguler/Express): ");
+                            layanan = input.nextLine();
+                            if (layanan.equalsIgnoreCase("Standard")) {
+                                jenLay = 400;
+                            } else if (layanan.equalsIgnoreCase("Reguler")) {
+                                jenLay = 500;
+                            } else if (layanan.equalsIgnoreCase("Express")) {
+                                jenLay = 600;
+                            } else {
+                                System.out.println("Jenis layanan tidak valid!");
+                                continue; 
+                            }
+                        }
+
+                        beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
+
+                        if (beratVolume > barangInt[1]) {
+                        biaya = (10000 * beratVolume) + (jenLay * 10);
+                        if (asal.equalsIgnoreCase(tujuan)) {
+                            biaya += 5000;
+                            }
+                        } else {
+                        biaya = (10000 * barangInt[1]) + (jenLay * 10);
+                        if (asal.equalsIgnoreCase(tujuan)) {
+                            biaya += 5000;
+                            }
+                        }
+                        System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya));
+                 
                 }else if (pilih.equals("4")) {
                     
-                
                 }else if (pilih.equals("5")) {
                     
                 
                 }else if (pilih.equals("6")) {
-                    
                 
-                }else if (pilih.equals("7")) {
-                    
+                }else if (pilih.equals("7")) { 
                 
                 }else if (pilih.equals("8")) {
-                    
                 
                 }else if (pilih.equals("9")) {
                     System.out.println("keluar");
                     System.exit(0);
+                
                 }
             }
         }
