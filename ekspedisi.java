@@ -68,9 +68,9 @@ public class ekspedisi {
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     
                 } else if (pilih.equals("3")) {
-                        System.out.println("Asal(Provinsi):");
+                        System.out.print("Asal(Provinsi):");
                         asal = input.nextLine();
-                        System.out.println("Tujuan(Provinsi)");
+                        System.out.print("Tujuan(Provinsi):");
                         tujuan = input.nextLine();
 
                          System.out.print("Berat(kg): ");
@@ -82,8 +82,8 @@ public class ekspedisi {
                         barangInt[3] = input.nextInt();
                         System.out.print("Tinggi(cm): ");
                         barangInt[4] = input.nextInt();
-
-                            while (true) {
+                        
+                        while (true) {
                             System.out.print("Pilih jenis layanan pengiriman (Standard/Reguler/Express): ");
                             layanan = input.nextLine();
                             if (layanan.equalsIgnoreCase("Standard")) {
@@ -96,8 +96,9 @@ public class ekspedisi {
                                 System.out.println("Jenis layanan tidak valid!");
                                 continue; 
                             }
+                            break;
                         }
-
+                        
                         beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
 
                         if (beratVolume > barangInt[1]) {
