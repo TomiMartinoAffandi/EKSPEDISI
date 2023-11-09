@@ -6,7 +6,7 @@ public class ekspedisi {
         var clearScreen = ("\033[H\033[2J");
         System.out.println(clearScreen);
         
-        String pilih, asal, tujuan, kota, layanan;
+        String pilih, asal, tujuan, kota, layanan,username, passwrod;
         boolean berhasilLogin = false;
         int biaya, berat, panjang, lebar, tinggi, jenLay, beratVolume, counter;
         String[][] user = new String[1][2];
@@ -29,7 +29,6 @@ public class ekspedisi {
             System.out.println(clearScreen);
 
             if (pilih.equals("1")) {
-                String username, passwrod;
                 System.out.print("Masukan username :");
                 username = input.nextLine();
                 System.out.print("Masukan password :");
@@ -63,8 +62,9 @@ public class ekspedisi {
                     System.out.println(clearScreen);
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     username = input.nextLine();
-                System.out.print("Masukan password :");
-                passwrod = input.nextLine();
+                    System.out.print("Masukan password :");
+                    passwrod = input.nextLine();
+
                 for (int i = 0; i < user.length; i++) {
                     if (username.equals(user[i][0]) && passwrod.equals(user[i][1])) {
                         berhasilLogin = true;
@@ -235,6 +235,7 @@ public class ekspedisi {
                             System.out.println("Jenis layanan tidak valid!");
                             continue; // Mengulangi loop jika jenis layanan tidak valid
                             }
+                            break;
                         }
                     
                         // Perhitungan biaya (berdasarkan jenLay + berat)
@@ -460,6 +461,7 @@ public class ekspedisi {
                             System.out.println("Jenis layanan tidak valid!");
                             continue; // Mengulangi loop jika jenis layanan tidak valid
                             }
+                            break;
                         }
                     
                         // Perhitungan biaya (berdasarkan jenLay + berat)
@@ -602,6 +604,7 @@ public class ekspedisi {
                     System.out.println("keluar");
                     System.exit(0);
                 
+                    }
                 }
             }
         }
