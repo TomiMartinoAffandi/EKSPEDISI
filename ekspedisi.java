@@ -8,7 +8,7 @@ public class ekspedisi {
         
         String pilih, asal, tujuan, kota, layanan,username, passwrod;
         boolean berhasilLogin = false;
-        int biaya, berat, panjang, lebar, tinggi, jenLay, beratVolume, counter;
+        int biaya, jenLay, beratVolume, counter;
         String[][] user = new String[1][2];
         user[0][0] = "admin";
         user[0][1] = "admin";
@@ -16,7 +16,6 @@ public class ekspedisi {
         String[] identitasLabels = {
             "Nama", "Alamat", "Kecamatan", "Kelurahan", "Kota", "Provinsi", "Kode pos", "Nomor Telepon"
         };
-        String[] kotaDikirim = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
         String[] kotaDiterima = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
         String[] barangString = new String[2];
         int[] barangInt = new int[5];
@@ -69,16 +68,21 @@ public class ekspedisi {
                             
                             for (int i = 0; i < 8; i++) {
                                 if (i == 4) {
-                                    while (true) {
+                                    boolean valid = false;
+                                    do{
                                         System.out.print(identitasLabels[i] + " " + ((j == 0) ? "pengirim" : "penerima") + " (Malang/Surabaya/Jakarta/Madiun/Jember): ");
-                                        String kota1 = input.nextLine();
-                                        if (isValidKota(kota1, kotaDiterima)) {
-                                            identitas[i][j] = kota1;
-                                            break;
-                                        } else {
+                                        kota = input.nextLine();
+                                        for (String kotaD : kotaDiterima) {
+                                            if (kota.equalsIgnoreCase(kotaD)) {
+                                                identitas[i][j] = kota;
+                                                valid = true;
+                                                break;
+                                            } 
+                                        }
+                                        if (!valid) {
                                             System.out.println("Kota yang dimasukkan tidak valid. Silakan masukkan salah satu dari lima kota yang diizinkan.");
                                         }
-                                    }
+                                    } while (!valid);
                                 } else {
                                     System.out.print(identitasLabels[i] + " " + ((j == 0) ? "pengirim" : "penerima") + ": ");
                                     identitas[i][j] = input.nextLine();
@@ -229,16 +233,21 @@ public class ekspedisi {
                             
                             for (int i = 0; i < 8; i++) {
                                 if (i == 4) {
-                                    while (true) {
+                                    boolean valid = false;
+                                    do {
                                         System.out.print(identitasLabels[i] + " " + ((j == 0) ? "pengirim" : "penerima") + " (Malang/Surabaya/Jakarta/Madiun/Jember): ");
-                                        String kota1 = input.nextLine();
-                                        if (isValidKota(kota1, kotaDiterima)) {
-                                            identitas[i][j] = kota1;
-                                            break;
-                                        } else {
+                                        kota = input.nextLine();
+                                        for (String kotaD : kotaDiterima) {
+                                            if (kota.equalsIgnoreCase(kotaD)) {
+                                                identitas[i][j] = kota;
+                                                valid = true;
+                                                break;
+                                            } 
+                                        }
+                                        if (!valid) {
                                             System.out.println("Kota yang dimasukkan tidak valid. Silakan masukkan salah satu dari lima kota yang diizinkan.");
                                         }
-                                    }
+                                    } while (!valid);
                                 } else {
                                     System.out.print(identitasLabels[i] + " " + ((j == 0) ? "pengirim" : "penerima") + ": ");
                                     identitas[i][j] = input.nextLine();
@@ -444,16 +453,5 @@ public class ekspedisi {
                 }
             }
         }
-    }
-    
-    
-    //memeriksa validalitas input kota
-    public static boolean isValidKota(String kota1, String[] kotaDiterima) {
-        for (String kotaD : kotaDiterima) {
-            if (kota1.equalsIgnoreCase(kotaD)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
