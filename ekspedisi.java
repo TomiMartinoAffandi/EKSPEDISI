@@ -488,19 +488,44 @@ public class ekspedisi {
                     counter = 0;
                     
                     System.out.println("poin anda :" +Poin);
-                    System.out.println("1. voucher diskon ongkir 40%");
-                    System.out.println("2. voucher diskon ongkir 30%");
-                    System.out.println("3. Exit");
+                    System.out.println("1. voucher diskon ongkir 40%(25 poin)");
+                    System.out.println("2. voucher diskon ongkir 30%(20 poin)");
+                    System.out.println("3. Iphone 14 Pro Max(5000000 poin)");
+                    System.out.println("4. Macbook A1(10000000 poin)");
+                    System.out.println("5. Exit");
                         
                     if (pilih.equals("1")) {
-                        System.out.println("selamat anda mendapat voucher diskon ongkir 40%(25 Poin)");
-                        Poin -= 25;
-                        disc1 += 1;
+                        if (Poin >= 25) {
+                            System.out.println("selamat anda mendapat voucher diskon ongkir 40%");
+                            Poin -= 25;
+                            disc1 += 1;  
+                        }else
+                            System.out.println("poin anda tidak mencukupi");
                     }
                     if (pilih.equals("2")) {
-                        System.out.println("selamat anda mendapat voucher diskon ongkir 40%(25 Poin)");
-                        Poin -= 20;
-                        disc2 += 1;
+                        if (Poin >= 20) {
+                            System.out.println("selamat anda mendapat voucher diskon ongkir 30%");
+                            Poin -= 20;
+                            disc1 += 1;  
+                        }else
+                            System.out.println("poin anda tidak mencukupi");
+                    }
+                    if (pilih.equals("3")) {
+                        if (Poin >= 5000000 ) {
+                            System.out.println("selamat anda mendapat Iphone 14 Pro Max");
+                            Poin -= 5000000;
+                        }else
+                            System.out.println("poin anda tidak mencukupi");
+                    }
+                    if (pilih.equals("4")) {
+                        if (Poin >= 10000000) {
+                            System.out.println("selamat anda mendapat Macbook A1");
+                            Poin -= 10000000;
+                        }else
+                            System.out.println("poin anda tidak mencukupi");
+                    }
+                    if (pilih.equals("5")) {
+                        break;
                     }
                 }else if (pilih.equals("6")) {
                     
