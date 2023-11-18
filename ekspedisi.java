@@ -350,6 +350,28 @@ public class ekspedisi {
                             biaya += 5000;
                         }
                     }
+                    System.out.println("apakah anda ingin menggunakan voucher(y/n)?");
+                    if (pilih.equalsIgnoreCase("y")) {
+                    while (true) {
+                            System.out.println("Pilih Voucher :");
+                            System.out.println("1. Diskon Ongkir 40%");
+                            System.out.println("2. Diskon Ongkir 30%");
+                            
+                            if (pilih.equals("1")) {
+                                if (disc1 == 1) {
+                                    biaya*=0.4;
+                                    disc1 -=1;
+                                }else
+                                    System.out.println("anda tidak memenuhi syarat");
+                            }else if (pilih.equals("2")) {
+                                if (disc2 == 1) {
+                                    biaya*=0.3;
+                                    disc2-=1;
+                                }else
+                                    System.out.println("anda tidak memenuhi syarat");
+                            }
+                        } 
+                    }
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya));
                     //pembayaran
                     
