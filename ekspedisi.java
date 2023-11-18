@@ -7,8 +7,8 @@ public class ekspedisi {
         System.out.println(clearScreen);
         
         String pilih, asal, tujuan, kota, layanan,username, passwrod;
-        boolean berhasilLogin = false;
-        int biaya, jenLay, beratVolume, counter;
+        boolean berhasilLogin = false; 
+        int biaya, jenLay, beratVolume, counter, disc1 = 0, disc2 = 0, Poin = 0;
         String[][] user = new String[1][2];
         user[0][0] = "admin";
         user[0][1] = "admin";
@@ -162,6 +162,28 @@ public class ekspedisi {
                             biaya += 5000;
                             }
                         }
+                    System.out.println("apakah anda ingin menggunakan voucher(y/n)?");
+                    if (pilih.equalsIgnoreCase("y")) {
+                    while (true) {
+                            System.out.println("Pilih Voucher :");
+                            System.out.println("1. Diskon Ongkir 40%");
+                            System.out.println("2. Diskon Ongkir 30%");
+                            
+                            if (pilih.equals("1")) {
+                                if (disc1 == 1) {
+                                    biaya*=0.4;
+                                    disc1 -=1;
+                                }else
+                                    System.out.println("anda tidak memenuhi syarat");
+                            }else if (pilih.equals("2")) {
+                                if (disc2 == 1) {
+                                    biaya*=0.3;
+                                    disc2-=1;
+                                }else
+                                    System.out.println("anda tidak memenuhi syarat");
+                            }
+                        } 
+                    }
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya+5000));
                         //pembayaran
                     do {
@@ -222,6 +244,7 @@ public class ekspedisi {
                     System.out.println("Nomor resi anda adalah: "+noResi);
                         //info pick up
                     System.out.println("Silahkan menunggu kurir untuk mengambil paket anda sampai "+(day+1)+"/"+month+"/"+year);
+                    Poin += 10;
                     
                 } else if (pilih.equals("2")) {
                     System.out.println(clearScreen);
@@ -389,6 +412,7 @@ public class ekspedisi {
                         System.out.println("Nomor resi anda adalah: "+noResi);
                         //info drop off
                         System.out.println("Silahkan letakkan paket anda pada kantor cabang terdekat sampai "+(day+1)+"/"+month+"/"+year) ;
+                        Poin += 10;
                 
                 } else if (pilih.equals("3")) {
                     System.out.print("Asal(Provinsi):");
@@ -439,8 +463,23 @@ public class ekspedisi {
                 }else if (pilih.equals("4")) {
                         
                 }else if (pilih.equals("5")) {
-                        
+                    counter = 0;
                     
+                    System.out.println("poin anda :" +Poin);
+                    System.out.println("1. voucher diskon ongkir 40%");
+                    System.out.println("2. voucher diskon ongkir 30%");
+                    System.out.println("3. Exit");
+                        
+                    if (pilih.equals("1")) {
+                        System.out.println("selamat anda mendapat voucher diskon ongkir 40%(25 Poin)");
+                        Poin -= 25;
+                        disc1 += 1;
+                    }
+                    if (pilih.equals("2")) {
+                        System.out.println("selamat anda mendapat voucher diskon ongkir 40%(25 Poin)");
+                        Poin -= 20;
+                        disc2 += 1;
+                    }
                 }else if (pilih.equals("6")) {
                     
                 }else if (pilih.equals("7")) { 
