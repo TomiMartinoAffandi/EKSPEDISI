@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class ekspedisi {
@@ -8,7 +9,8 @@ public class ekspedisi {
             "Nama", "Alamat", "Kecamatan", "Kelurahan", "Kota", "Provinsi", "Kode pos", "Nomor Telepon"
         };
         String[][] identitas = new String[2][8];
-        while(true) {
+        boolean a = true;
+        while(a) {
             for (int i = 0; i < 2; i++) {
                 System.out.println("Masukkan informasi " + ((i == 0) ? "pengirim" : "penerima") + " (Informasi tidak boleh kosong!):");
                             
@@ -39,7 +41,7 @@ public class ekspedisi {
             System.out.print("Apakah anda ingin merubah data informasi pengiriman?(y/n): ");
             String jawaban = input.next();
             if (jawaban.equalsIgnoreCase("n")) {
-                break;
+                a = false;
             }
         }
         return identitas;
@@ -50,7 +52,9 @@ public class ekspedisi {
         int[] barangInt = new int[5];
         n = barangInt;
         System.out.println ("Masukkan informasi barang (Informasi tidak boleh kosong!)");
-        while (true) {
+        
+        boolean b = true;
+        while (b) {
             //input informasi barang
             System.out.print("Nama barang: ");
             barangString[0] = input.nextLine();
@@ -73,20 +77,18 @@ public class ekspedisi {
             System.out.print("Apakah Anda ingin mengubah data informasi barang? (y/n): ");
             String jawaban = input.next();
             if (jawaban.equalsIgnoreCase("n")) {
-                break;
+                b = false;
             }
         }
         return barangInt;
     }
     
-    static int hitungBiaya(int n) {
+    static int hitungBiaya(int n, int[] barangInt, String[][] identitas) {
         int biaya;
         
         Scanner input = new Scanner(System.in);
-        int[] barangInt = informasiBarang(new int[5]);
-        String[][] identitas = informasiPengiriman(new String[2][8]);
         
-        int jenLay = jenisLayanan(n);
+        int jenLay = jenisLayanan();
         
         int beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
                
@@ -103,26 +105,21 @@ public class ekspedisi {
         }
         return biaya;
     }
-    static int jenisLayanan(int L) {
+    static int jenisLayanan() {
         Scanner input = new Scanner(System.in);
-        L = 0;
         while (true) {
             System.out.print("Pilih jenis layanan pengiriman (Standard/Reguler/Express): ");
             String layanan = input.nextLine();
             if (layanan.equalsIgnoreCase("Standard")) {
-                L = 400;
-                break;
+                return 400;
             } else if (layanan.equalsIgnoreCase("Reguler")) {
-                L = 500;
-                break;
+                return 500;
             } else if (layanan.equalsIgnoreCase("Express")) {
-                L = 600;
-                break;
+                return 600;
             } else {
                 System.out.println("Jenis layanan tidak valid!");
             }
         }
-        return L;
     }
     static int[] tukarPoin(int poin) {
         int p = poin;
@@ -211,12 +208,17 @@ public class ekspedisi {
             }
         } while (!pembayaranValid);
     }
+    static String generateUniqueCode() {
+        Random random = new Random();
+            int uniqueCode = random.nextInt(10); 
+            return String.format("%03d", uniqueCode);
+    }
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         String clearScreen = ("\033[H\033[2J");
         System.out.println(clearScreen);
         
-        String pilih, asal, tujuan,username, passwrod;
+        String pilih, username, passwrod;
         boolean berhasilLogin = false; 
         int jenLay = 0, Poin = 0, harga = 0, voucher = 0;
         String[][] user = new String[1][2];
@@ -269,26 +271,17 @@ public class ekspedisi {
                     //memanggil fungsi informasiPengiriman
                     
                     String[][] identitas = informasiPengiriman(new String[2][5]);
-                
-                    System.out.println("=============================");
-                    System.out.println("=============================");
+                    System.out.println(clearScreen);
                     
                     //memanggil fungsi informasiBarang
-                    if (barangI == null) {
-                        barangI = informasiBarang(new int[5]);
-                    }
+                    barangI = informasiBarang(new int[5]);
                     
-                    System.out.println("=============================");
-                    
-                    // Pemilihan jenis layanan
-                    if (jenLay == 0) {
-                        jenLay = jenisLayanan(jenLay);
-                    }
+                    System.out.println(clearScreen);
                     
                     // Pemanggilan fungsi hitungBiaya
-                    harga = hitungBiaya(harga);
+                    harga = hitungBiaya(harga, barangI, identitas);
                     if (harga == 0) {
-                        harga = hitungBiaya(harga);
+                        harga = hitungBiaya(harga, barangI, identitas);
                     }
                     
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga+5000));
@@ -301,13 +294,11 @@ public class ekspedisi {
                             pembayaran();
                             break;
                         }
-                        System.out.println("=============================");
+                        System.out.println();
                     }
-                    
+                    System.out.println(clearScreen);
                     
                     //Informasi tanggal
-                    System.out.println("=============================");
-                    System.out.println("=============================");
                     System.out.println("Masukkan tanggal pick-up: ");
                     System.out.print("dd: ");
                     int day = input.nextInt();
@@ -316,11 +307,16 @@ public class ekspedisi {
                     System.out.print("yy: ");
                     int year = input.nextInt();
                     input.nextLine();
+                    System.out.println(clearScreen);
                         
                     //update no resi
+                    String kode = generateUniqueCode();
+                    String Resi = day+month+year+kode;
+                    
                     System.out.println("Silahkan simpan nomor resi anda!");
-                    String noResi = "EKS001"+((year+month+20)/4)+(day+12);
+                    String noResi = "EKS001"+ Resi;
                     System.out.println("Nomor resi anda adalah: "+noResi);
+                    System.out.println();
                     
                     //info pick up
                     System.out.println("Silahkan menunggu kurir untuk mengambil paket anda sampai "+(day+1)+"/"+month+"/"+year);
@@ -331,26 +327,16 @@ public class ekspedisi {
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     //memanggil fungsi informasiPengiriman
                     String[][] identitas = informasiPengiriman(new String[2][5]);
+                    System.out.println(clearScreen);
                 
-                    System.out.println("=============================");
-                    System.out.println("=============================");
-                    
                     //memanggil fungsi informasiBarang
-                    if (barangI == null) {
-                        barangI = informasiBarang(new int[5]);
-                    }
-                
-                    System.out.println("=============================");
-                    System.out.println("=============================");
-                
-                    // Pemilihan jenis layanan
-                    if (jenLay == 0) {
-                        jenLay = jenisLayanan(jenLay);
-                    }
+                    barangI = informasiBarang(new int[5]);
+                    
+                    System.out.println(clearScreen);
                 
                     // Pemanggilan fungsi hitungBiaya
                     if (harga == 0) {
-                        harga = hitungBiaya(harga);
+                        harga = hitungBiaya(harga, barangI, identitas);
                     }
                 
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
@@ -363,12 +349,11 @@ public class ekspedisi {
                             pembayaran();
                             break;
                         }
-                        System.out.println("=============================");
+                        System.out.println();
                     }
+                    System.out.println(clearScreen);
                 
                     //Informasi tanggal
-                    System.out.println("=============================");
-                    System.out.println("=============================");
                     System.out.println("Masukkan tanggal drop-off: ");
                     System.out.print("dd: ");
                     int day = input.nextInt();
@@ -377,33 +362,39 @@ public class ekspedisi {
                     System.out.print("yy: ");
                     int year = input.nextInt();
                     input.nextLine();
+                    System.out.println(clearScreen);
                 
                     //update no resi
+                    String kode = generateUniqueCode();
+                    String Resi = day+month+year+kode;
+                    
                     System.out.println("Silahkan simpan nomor resi anda!");
-                    String noResi = "EKS021"+((year+month+20)/4)+(day+12);
+                    String noResi = "EKS021"+ Resi;
                     System.out.println("Nomor resi anda adalah: "+noResi);
+                    System.out.println();
                 
                     //info drop off
                     System.out.println("Silahkan letakkan paket anda pada kantor cabang terdekat sampai "+(day+1)+"/"+month+"/"+year) ;
                     Poin += 10;
                 
                 } else if (pilih.equals("3")) {
+                    String[][] provinsi = new String[2][];
+                    provinsi[0] = new String[1]; // asal provinsi
+                    provinsi[1] = new String[1]; // tujuan provinsi
+                
                     System.out.print("Asal(Provinsi):");
-                    asal = input.nextLine();
+                    provinsi[0][0] = input.nextLine();
                     System.out.print("Tujuan(Provinsi):");
-                    tujuan = input.nextLine();
+                    provinsi[1][0] = input.nextLine();
+                    System.out.println(clearScreen);
                 
                     //memanggil fungsi informasiBarang
-                    if (barangI == null) {
-                        barangI = informasiBarang(new int[5]);
-                    }
-                
-                    if (jenLay == 0) {
-                        jenLay = jenisLayanan(jenLay);
-                    }
+                    barangI = informasiBarang(new int[5]);
+                    
+                    System.out.println(clearScreen);
                 
                     if (harga == 0) {
-                        harga = hitungBiaya(harga);
+                        harga = hitungBiaya(harga, barangI, provinsi);
                     }
                 
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
@@ -417,6 +408,39 @@ public class ekspedisi {
                 }else if (pilih.equals("7")) { 
                     
                 }else if (pilih.equals("8")) {
+                    String[][] lacakResi = {
+                        //resi, status, informasi
+                        {"EKS0010101010", "Sedang diproses", "Menunggu kurir untuk mengambil paket"},
+                        {"EKS0210202020", "Sedang diproses", "Menunggu paket diserahkan ke pihak jasa kirim"},
+                        {"EKS0010303030", "Sedang dikirim", "Paket telah sampai di drop point Malang"},
+                        {"EKS0210404040", "Sedang dikirim", "Paket sedang dalam perjalanan menuju drop point Surabaya"},
+                        {"EKS0010505050", "Sedang dikirim", "Paket sedang diantar ke alamat tujuan"},
+                        {"EKS0210606060", "Terkirim", "Paket telah diterima oleh penerima"}
+                    };
+                    
+                    System.out.print("Masukkan nomor resi yang ingin dilacak: ");
+                    String inputResi = input.nextLine();
+                    
+                    boolean ditemukan = false;
+                    String status = null, informasi = null;
+                    
+                    for (int i = 0; i < lacakResi.length; i++) {
+                        if (lacakResi[i][0].equals(inputResi)) {
+                            ditemukan = true; 
+                            status = lacakResi[i][1]; 
+                            informasi = lacakResi[i][2];
+                            break; 
+                        }
+                    }
+                    
+                    if (ditemukan) {
+                        System.out.println("Status pengiriman: " + status);
+                        System.out.println("Informasi Pengiriman: "+informasi);
+                    } else {
+                        System.out.println("Nomor resi tidak ditemukan. Mohon periksa kembali nomor resi Anda.");
+                    }
+                    System.out.println();
+                
                     
                 }else if (pilih.equals("9")) {
                     System.out.println("keluar");
