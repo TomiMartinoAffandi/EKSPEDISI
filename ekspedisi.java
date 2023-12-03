@@ -148,7 +148,7 @@ public class ekspedisi {
                 if (p >= 20) {
                     System.out.println("selamat anda mendapat voucher diskon ongkir 30%");
                     p -= 20;
-                    disc[2] += 1;
+                    disc[1] += 1;
                 }else
                     System.out.println("poin anda tidak mencukupi");
             } else if (pilih.equals("3")) {
@@ -257,9 +257,8 @@ public class ekspedisi {
                 System.out.println("4. Drop Point Sekitar");
                 System.out.println("5. Total Poin");
                 System.out.println("6. Tukar Voucher");
-                System.out.println("7. Order Saya");
-                System.out.println("8. Lacak Paket");
-                System.out.println("9. Exit");
+                System.out.println("7. Lacak Paket");
+                System.out.println("8. Exit");
 
                 System.out.print("pilih menu : ");
                 pilih = input.nextLine();
@@ -406,8 +405,6 @@ public class ekspedisi {
                 }else if (pilih.equals("6")) {
                     
                 }else if (pilih.equals("7")) { 
-                    
-                }else if (pilih.equals("8")) {
                     String[][] lacakResi = {
                         //resi, status, informasi
                         {"EKS0010101010", "Sedang diproses", "Menunggu kurir untuk mengambil paket"},
@@ -440,9 +437,8 @@ public class ekspedisi {
                         System.out.println("Nomor resi tidak ditemukan. Mohon periksa kembali nomor resi Anda.");
                     }
                     System.out.println();
-                
                     
-                }else if (pilih.equals("9")) {
+                }else if (pilih.equals("8")) {
                     System.out.println("keluar");
                     System.exit(0);
                 }

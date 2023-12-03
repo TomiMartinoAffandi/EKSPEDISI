@@ -9,7 +9,6 @@ Sistem Ekspedisi adalah sistem yang digunakan untuk mengelola dan memudahkan pro
 - menu total poin 
 - menu voucher
 - menu drop point
-- menu order saya 
 # Upcoming
 https://trello.com/b/4FrT3cWM/project-management
 # Kontributor
