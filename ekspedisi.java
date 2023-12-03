@@ -399,7 +399,65 @@ public class ekspedisi {
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
                     
                 }else if (pilih.equals("4")) {
-                        
+                        String[] dropPoints = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
+        String[][] branchDetails = {
+            {"Jl. Kalpataru No 89", "Jl. S. Supriadi No.74", "Jl. Bendungan Sutami No. 15"},
+            {"Jl. Raya Darmo Indah Bar. No.36", "Jl. Dukuh Setro IV No.2", "Jl. Urip Sumoharjo No.44"},
+            {"Jl. Mangga Dua Raya 39II", "Jl Pramuka Sari II No.20"},
+            {"Jl. Salak No.6", "Jl. Basuki Rahmad No.4", "Jl. Imam Bonjol"},
+            {"Jl. Sumatra No.75A", "Jl. Basuki Rahmat No.151"}
+        };
+
+        boolean changeLocation = true;
+
+        while (changeLocation) {
+            System.out.println("Pilih Drop Point Sekitar:");
+            for (int i = 0; i < dropPoints.length; i++) {
+                System.out.println((i + 1) + ". " + dropPoints[i]);
+            }
+
+            System.out.print("Masukkan nomor Drop Point yang dipilih (1-" + dropPoints.length + "): ");
+            int selectedDropPointIndex = input.nextInt();
+
+            if (selectedDropPointIndex >= 1 && selectedDropPointIndex <= dropPoints.length) {
+                String selectedDropPoint = dropPoints[selectedDropPointIndex - 1];
+                System.out.println("Anda telah memilih Drop Point: " + selectedDropPoint);
+
+                String[] branches = branchDetails[selectedDropPointIndex - 1];
+                System.out.println("Berikut pilihan cabangnya:");
+                for (int i = 0; i < branches.length; i++) {
+                    System.out.println((i + 1) + ". " + branches[i]);
+                }
+
+                System.out.print("Masukkan nomor cabang yang dipilih (1-" + branches.length + "): ");
+                int selectedBranchIndex = input.nextInt();
+
+                if (selectedBranchIndex >= 1 && selectedBranchIndex <= branches.length) {
+                    String selectedBranch = branches[selectedBranchIndex - 1];  
+                    System.out.println("Apakah anda memilih " + selectedBranch + " (ya/Tidak)");
+                    String confirmationInput = input.next().toLowerCase();
+
+                    if (confirmationInput.equals("ya")) {
+                        System.out.println("Anda telah memilih " + selectedDropPoint +
+                                " dengan drop poin " + selectedBranch);
+                    }
+
+                    System.out.print("Apakah anda ingin mengganti lokasi lain? (ya/Tidak): ");
+                    String changeLocationInput = input.next().toLowerCase();
+                    changeLocation = changeLocationInput.equals("ya");
+                    
+                } else {
+                    System.out.println("Nomor cabang tidak valid.");
+                    changeLocation = false;
+                }
+            } else {
+                System.out.println("Nomor Drop Point tidak valid.");
+                changeLocation = false;
+            }
+        }
+
+        // Don't forget to close the Scanner
+        input.close(); 
                 }else if (pilih.equals("5")) {
                     int disc[] = tukarPoin(Poin);
                 }else if (pilih.equals("6")) {
