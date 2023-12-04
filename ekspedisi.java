@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class ekspedisi {
     static int poin;
+    static int counter;
 
     static String[][] informasiPengiriman(String[][] n) {
         Scanner input = new Scanner(System.in);
