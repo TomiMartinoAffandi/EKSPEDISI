@@ -2,9 +2,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class ekspedisi {
-    static int poin;
-    static int counter;
-
     static String[][] informasiPengiriman(String[][] n) {
         Scanner input = new Scanner(System.in);
         String[] kotaDiterima = {"Malang", "Surabaya", "Jakarta", "Madiun", "Jember"};
@@ -106,34 +103,6 @@ public class ekspedisi {
                 biaya += 5000; // Jika beda provinsi
             }
         }
-        System.out.print("apakah anda ingin menggunakan voucher(y/n)?");
-            String pilih = input.nextLine();
-            if (pilih.equalsIgnoreCase("y")) {
-            while (true) {
-                    System.out.println("Pilih Voucher :");
-                    System.out.println("Poin anda :"+poin);
-                    System.out.println("1. Diskon Ongkir 40%(25 poin)");
-                    System.out.println("2. Diskon Ongkir 30%(20 poin)");
-                    System.out.println("3. Cancel");
-                    pilih = input.nextLine();
-
-                    if (pilih.equals("1")) {
-                        if (poin >= 25) {
-                            biaya*=0.4;
-                        }else
-                            System.out.println("anda tidak memenuhi syarat");
-                    }else if (pilih.equals("2")) {
-                        if (poin >= 20) {
-                            biaya*=0.3;
-                        }else
-                            System.out.println("anda tidak memenuhi syarat");
-                    }else if (pilih.equals("3")) {
-                        break;
-                    }
-                } 
-            }
-            System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya));
-            //pembayaran
         return biaya;
     }
     static int jenisLayanan() {
@@ -159,7 +128,8 @@ public class ekspedisi {
         
         while(true) {
             System.out.println("poin anda :" +poin);
-
+            System.out.println("1. voucher diskon ongkir 40%(25 poin)");
+            System.out.println("2. voucher diskon ongkir 30%(20 poin)");
             System.out.println("3. Iphone 14 Pro Max(5000000 poin)");
             System.out.println("4. Macbook A1(10000000 poin)");
             System.out.println("5. Exit");
@@ -168,20 +138,35 @@ public class ekspedisi {
             String pilih = input.nextLine();
             
             if (pilih.equals("1")) {
+                if (p >= 25) {
+                    System.out.println("selamat anda mendapat voucher diskon ongkir 40%");
+                    p -= 25;
+                    disc[0] += 1;
+                }else
+                    System.out.println("poin anda tidak mencukupi");
+            } else if (pilih.equals("2")) {
+                if (p >= 20) {
+                    System.out.println("selamat anda mendapat voucher diskon ongkir 30%");
+                    p -= 20;
+                    disc[1] += 1;
+                }else
+                    System.out.println("poin anda tidak mencukupi");
+            } else if (pilih.equals("3")) {
                 if (p >= 5000000 ) {
                     System.out.println("selamat anda mendapat Iphone 14 Pro Max");
                     p -= 5000000;
                 }else
                     System.out.println("poin anda tidak mencukupi");
-            } else if (pilih.equals("2")) {
+            }else if (pilih.equals("4")) {
                 if (p >= 10000000) {
                     System.out.println("selamat anda mendapat Macbook A1");
                     p -= 10000000;
                 }else
                     System.out.println("poin anda tidak mencukupi");
-                
-            } else if (pilih.equals("3")) {
+            }else if (pilih.equals("5")) {
                 break;
+            }else {
+                System.out.println("Pilihan tidak valid");
             }
         }
         return disc;
@@ -430,13 +415,17 @@ public class ekspedisi {
             for (int i = 0; i < dropPoints.length; i++) {
                 System.out.println((i + 1) + ". " + dropPoints[i]);
             }
-
             System.out.print("Masukkan nomor Drop Point yang dipilih (1-" + dropPoints.length + "): ");
             int selectedDropPointIndex = input.nextInt();
 
             if (selectedDropPointIndex >= 1 && selectedDropPointIndex <= dropPoints.length) {
                 String selectedDropPoint = dropPoints[selectedDropPointIndex - 1];
                 System.out.println("Anda telah memilih Drop Point: " + selectedDropPoint);
+            else {                      berhasilLogin
+
+                 String selectedDropPoint = dropPoints[berhasilLoginIndex - 1];
+
+            }
 
                 String[] branches = branchDetails[selectedDropPointIndex - 1];
                 System.out.println("Berikut pilihan cabangnya:");
@@ -460,7 +449,8 @@ public class ekspedisi {
                     System.out.print("Apakah anda ingin mengganti lokasi lain? (ya/Tidak): ");
                     String changeLocationInput = input.next().toLowerCase();
                     changeLocation = changeLocationInput.equals("ya");
-                    
+                    changeLocation = !changeLocationInput.equals("tidak");
+                    changeLocation = false;
                 } else {
                     System.out.println("Nomor cabang tidak valid.");
                     changeLocation = false;
@@ -475,7 +465,6 @@ public class ekspedisi {
         input.close(); 
                 }else if (pilih.equals("5")) {
                     int disc[] = tukarPoin(Poin);
-                    System.out.println(clearScreen);
                 }else if (pilih.equals("6")) {
                     
                 }else if (pilih.equals("7")) { 
