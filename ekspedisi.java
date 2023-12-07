@@ -162,6 +162,7 @@ public class ekspedisi {
         while (true) {
             System.out.println("poin anda :" + poin);
 
+            System.out.println("");
             System.out.println("1. Iphone 14 Pro Max(5000000 poin)");
             System.out.println("2. Macbook A1(10000000 poin)");
             System.out.println("3. Exit");
