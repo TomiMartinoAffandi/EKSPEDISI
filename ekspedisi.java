@@ -44,13 +44,13 @@ public class ekspedisi {
                     }
                 }
             }
-
-            System.out.print("Apakah anda ingin merubah data informasi pengiriman?(y/n): ");
-            String jawaban = input.next();
-            if (jawaban.equalsIgnoreCase("n")) {
-                a = false;
+           
+                System.out.print("Apakah anda ingin merubah data informasi pengiriman?(y/n): ");
+                String jawaban = input.next();
+                if (jawaban.equalsIgnoreCase("n")) {
+                    a = false;
+                }
             }
-        }
         return identitas;
     }
 
@@ -91,9 +91,7 @@ public class ekspedisi {
 
     static int hitungBiaya(int n, int[] barangInt, String[][] identitas) {
         int biaya;
-
         int jenLay = jenisLayanan();
-
         int beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
 
         if (beratVolume > barangInt[1]) {
@@ -120,7 +118,7 @@ public class ekspedisi {
 
                 if (pilih.equals("1")) {
                     if (poin >= 25) {
-                        biaya*=0.4;
+                        n*=0.4;
                     }else
                         System.out.println("anda tidak memenuhi syarat");
                 }else if (pilih.equals("2")) {
@@ -153,7 +151,7 @@ public class ekspedisi {
         }
     }
 
-    static int[] tukarPoin(int poin) {
+    static int tukarPoin(int poin) {
         int p = poin;
         int[] disc = new int[2];
 
@@ -307,20 +305,20 @@ public class ekspedisi {
             System.out.print("pilih menu : ");
             pilih = input.nextLine();
             System.out.println(clearScreen);
-
-            if (pilih.equals("1")) {
-                System.out.print("Masukan username :");
-                username = input.nextLine();
-                System.out.print("Masukan password :");
-                passwrod = input.nextLine();
-                for (int i = 0; i < user.length; i++) {
-                    if (username.equals(user[i][0]) && passwrod.equals(user[i][1])) {
-                        berhasilLogin = true;
-                        break;
-                    } else {
-                        System.out.println("Maaf, Username atau Password anda salah");
-                    }
-                }
+            //while (true) {
+                if (pilih.equals("1")) {
+                    System.out.print("Masukan username :");
+                    username = input.nextLine();
+                    System.out.print("Masukan password :");
+                    passwrod = input.nextLine();
+                    for (int i = 0; i < user.length; i++) {
+                        if (username.equals(user[i][0]) && passwrod.equals(user[i][1])) {
+                            berhasilLogin = true;
+                            break;
+                        } else {
+                            System.out.println("Maaf, Username atau Password anda salah");
+                        }
+                    }    
                 System.out.println(clearScreen);
             }
             while (berhasilLogin) {
@@ -329,8 +327,8 @@ public class ekspedisi {
                 System.out.println("2. Drop off");
                 System.out.println("3. Harga");
                 System.out.println("4. Drop Point Sekitar");
-                System.out.println("5. Total Poin");
-                System.out.println("6. Tukar Voucher");
+                System.out.println("5. Tukar Poin");
+                System.out.println("6. Klaim Voucher");
                 System.out.println("7. Lacak Paket");
                 System.out.println("8. Exit");
 
@@ -343,7 +341,7 @@ public class ekspedisi {
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     // memanggil fungsi informasiPengiriman
 
-                    String[][] identitas = informasiPengiriman(new String[2][5]);
+                    String[][] identitas = informasiPengiriman(new String[2][8]);
                     System.out.println(clearScreen);
 
                     // memanggil fungsi informasiBarang
@@ -366,9 +364,9 @@ public class ekspedisi {
                         if (jawaban.equalsIgnoreCase("y")) {
                             pembayaran();
                             break;
-                        }
-                        System.out.println();
                     }
+                    System.out.println();
+                }
                     System.out.println(clearScreen);
 
                     // Informasi tanggal
@@ -399,7 +397,7 @@ public class ekspedisi {
                     System.out.println(clearScreen);
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     // memanggil fungsi informasiPengiriman
-                    String[][] identitas = informasiPengiriman(new String[2][5]);
+                    String[][] identitas = informasiPengiriman(new String[2][8]);
                     System.out.println(clearScreen);
 
                     // memanggil fungsi informasiBarang
@@ -423,8 +421,8 @@ public class ekspedisi {
                             break;
                         }
                         System.out.println();
-                    }
-                    System.out.println(clearScreen);
+                    }   
+                   System.out.println(clearScreen);
 
                     // Informasi tanggal
                     System.out.println("Masukkan tanggal drop-off: ");
@@ -528,7 +526,7 @@ public class ekspedisi {
                         }
                     }
                 } else if (pilih.equals("5")) {
-                    int disc[] = tukarPoin(Poin);
+                    int disc = tukarPoin(Poin);
                     System.out.println(clearScreen);
                     // ... (previous code)
 
