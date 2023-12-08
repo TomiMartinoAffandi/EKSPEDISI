@@ -155,9 +155,8 @@ public class ekspedisi {
         }
     }
 
-    static int[] tukarPoin(int poin) {
+    static int tukarPoin(int poin) {
         int p = poin;
-        int[] disc = new int[2];
 
         while (true) {
             System.out.println("poin anda :" + poin);
@@ -188,7 +187,7 @@ public class ekspedisi {
                 System.out.println("Pilihan tidak valid");
             }
         }
-        return disc;
+        return p;
     }
 
     static void pembayaran() {
@@ -346,7 +345,7 @@ public class ekspedisi {
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     // memanggil fungsi informasiPengiriman
 
-                    String[][] identitas = informasiPengiriman(new String[2][5]);
+                    String[][] identitas = informasiPengiriman(new String[2][8]);
                     System.out.println(clearScreen);
 
                     // memanggil fungsi informasiBarang
@@ -515,7 +514,7 @@ public class ekspedisi {
                         }
                     }
                 } else if (pilih.equals("5")) {
-                    int disc[] = tukarPoin(Poin);
+                    int disc = tukarPoin(Poin);
                     System.out.println(clearScreen);
                     // ... (previous code)
 
