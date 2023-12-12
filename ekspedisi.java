@@ -14,7 +14,7 @@ public class ekspedisi {
         String[] identitasLabels = {
                 "Nama", "Alamat", "Kecamatan", "Kelurahan", "Kota", "Provinsi", "Kode pos", "Nomor Telepon"
         };
-        String[][] identitas = new String[2][8];
+        n = new String[2][8];
         boolean a = true;
         while (a) {
             for (int i = 0; i < 2; i++) {
@@ -30,7 +30,7 @@ public class ekspedisi {
                             String kota = input.nextLine();
                             for (String kotaD : kotaDiterima) {
                                 if (kota.equalsIgnoreCase(kotaD)) {
-                                    identitas[i][j] = kota;
+                                    n[i][j] = kota;
                                     valid = true;
                                     break;
                                 }
@@ -42,7 +42,7 @@ public class ekspedisi {
                         } while (!valid);
                     } else {
                         System.out.print(identitasLabels[j] + " " + ((i == 0) ? "pengirim" : "penerima") + ": ");
-                        identitas[i][j] = input.nextLine();
+                        n[i][j] = input.nextLine();
                     }
                 }
             }
@@ -53,7 +53,7 @@ public class ekspedisi {
                 a = false;
             }
         }
-        return identitas;
+        return n;
     }
 
     static int[] informasiBarang(int[] n) {
@@ -82,11 +82,10 @@ public class ekspedisi {
                 System.out.println("inputan salah");
             }
         }
-        return barangInt;
+        return n;
     }
 
-    static int hitungBiaya(int harga, int[] barangInt, String[][] identitas) {
-        int biaya = 0;
+    static int hitungBiaya(int biaya, int[] barangInt, String[][] identitas) {
 
         if (barangInt != null && identitas != null) {
             int jenLay = jenisLayanan();
@@ -123,8 +122,7 @@ public class ekspedisi {
         }
     }
 
-    static int tukarPoin(int poin) {
-        int p = poin;
+    static int tukarPoin(int p) {
 
         while (true) {
             System.out.println("poin anda :" + poin);
@@ -352,38 +350,63 @@ public class ekspedisi {
                     barangI = informasiBarang(new int[5]);
 
                     System.out.println(clearScreen);
-
+                    
+                    // Pemanggilan fungsi hitungBiaya
+                    harga = hitungBiaya(harga, barangI, identitas);
+                    harga += 5000;
+                    System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
+                    
                     System.out.print("Apakah anda ingin menggunakan voucher(y/n): ");
                     String useVoucher = input.nextLine();
 
                     int potonganHarga = 0;
 
                     if (useVoucher.equalsIgnoreCase("y")) {
-                        System.out.print("Masukkan code voucher : ");
-                        String voucherCode = input.nextLine();
-
-                        // Apply discounts based on voucherCode
-                        if ("NEW40".equals(voucherCode)) {
-                            potonganHarga *= 0.4;
-                        } else if ("11FREE".equals(voucherCode)) {
-                            // No discount
-                        } else if ("YEARENDS20".equals(voucherCode)) {
-                            potonganHarga *= 0.2;
-                        } else if ("PRETTY15".equals(voucherCode)) {
-                            potonganHarga *= 0.15;
-                        } else if ("MERDEKA".equals(voucherCode)) {
-                            // No discount
-                        } else {
-                            System.out.println("Maaf, anda salah memasukkan code voucher.");
+                        boolean kodeBenar = false;
+                        
+                        while (!kodeBenar) {
+                            System.out.print("Masukkan code voucher (ketik '1' untuk exit) : ");
+                            String voucherCode = input.nextLine();
+                            // Apply discounts based on voucherCode
+                            if ("NEW40".equals(voucherCode)) {
+                                potonganHarga *= 0.4;
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("11FREE".equals(voucherCode)) {
+                                // No discount
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("YEARENDS20".equals(voucherCode)) {
+                                potonganHarga *= 0.2;
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("PRETTY15".equals(voucherCode)) {
+                                potonganHarga *= 0.15;
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("MERDEKA".equals(voucherCode)) {
+                                // No discount
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if (voucherCode.equals("1")) {
+                                break;
+                            } 
+                            else {
+                                System.out.println("Maaf, anda salah memasukkan code voucher.");
+                            }
+                            
                         }
-
-                        System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                        System.out.println();
+                        harga -= potonganHarga;
+                        System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
                     } else {
-                        System.out.println("Selamat anda mendapatkan potongan sebesar 0");
+                        break;
                     }
-                    // Pemanggilan fungsi hitungBiaya
-                    harga = hitungBiaya(harga, barangI, identitas);
-
                     // memanggil fungsi pembayaran
                     while (true) {
                         System.out.print("Ingin melanjutkan pembayaran? (y/n): ");
@@ -412,12 +435,60 @@ public class ekspedisi {
                     System.out.println(clearScreen);
 
                     // Pemanggilan fungsi hitungBiaya
-                    if (harga == 0) {
-                        harga = hitungBiaya(harga, barangI, identitas);
-                    }
-
+                    harga = hitungBiaya(harga, barangI, identitas);
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
+                
+                    System.out.print("Apakah anda ingin menggunakan voucher(y/n): ");
+                    String useVoucher = input.nextLine();
 
+                    int potonganHarga = 0;
+
+                    if (useVoucher.equalsIgnoreCase("y")) {
+                        boolean kodeBenar = false;
+                        
+                        while (!kodeBenar) {
+                            System.out.print("Masukkan code voucher (ketik '1' untuk exit): ");
+                            String voucherCode = input.nextLine();
+                            // Apply discounts based on voucherCode
+                            if ("NEW40".equals(voucherCode)) {
+                                potonganHarga *= 0.4;
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("11FREE".equals(voucherCode)) {
+                                // No discount
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("YEARENDS20".equals(voucherCode)) {
+                                potonganHarga *= 0.2;
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("PRETTY15".equals(voucherCode)) {
+                                potonganHarga *= 0.15;
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if ("MERDEKA".equals(voucherCode)) {
+                                // No discount
+                                System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
+                            
+                                kodeBenar = true;
+                            } else if (voucherCode.equals("1")) {
+                                break;
+                            } 
+                            else {
+                                System.out.println("Maaf, anda salah memasukkan code voucher.");
+                            }
+                        }
+                        System.out.println();
+                        harga -= potonganHarga;
+                        System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
+                    } else {
+                        break;
+                    }
+                
                     // pemanggilan fungsi pembayaran
                     while (true) {
                         System.out.print("Ingin melanjutkan pembayaran? (y/n): ");
