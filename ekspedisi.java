@@ -1,5 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.time.LocalDateTime;  
+import java.time.format.DateTimeFormatter;  
 
 public class ekspedisi {
     static int poin;
@@ -62,39 +64,23 @@ public class ekspedisi {
 
         boolean b = true;
         while (b) {
-            System.out.print("Nama barang: ");
-            barangString[0] = input.nextLine();
-            System.out.print("Jenis barang: ");
-            barangString[1] = input.nextLine();
-            while (b) {
-                try {
-                    System.out.print("Jumlah(pcs): ");
-                    barangInt[0] = Integer.parseInt(input.nextLine());
-    
-                    System.out.print("Berat(kg): ");
-                    barangInt[1] = Integer.parseInt(input.nextLine());
-    
-                    System.out.println("Hitung berat volume");
-                    System.out.print("Panjang(cm): ");
-                    barangInt[2] = Integer.parseInt(input.nextLine());
-    
-                    System.out.print("Lebar(cm): ");
-                    barangInt[3] = Integer.parseInt(input.nextLine());
-    
-                    System.out.print("Tinggi(cm): ");
-                    barangInt[4] = Integer.parseInt(input.nextLine());
-    
-                    b = false; // Set 'b' to false to exit the loop since all inputs are valid
-                } catch (NumberFormatException e) {
-                    System.out.println("Masukan hanya angka. Silakan coba lagi.");
-                }    
-            }
-        
+            barangString[0] = getInputString("Nama Barang", false);
+            barangString[1] = getInputString("Jenis Barang", false);
+            barangInt[0] = Integer.parseInt(getInputStringNumber("Jumlah(pcs)", false));
+            barangInt[1] = Integer.parseInt(getInputStringNumber("Berat(kg)", false));
+            System.out.println("Hitung berat volume");
+            barangInt[2] = Integer.parseInt(getInputStringNumber("Panjang(cm)", false));
+            barangInt[3] = Integer.parseInt(getInputStringNumber("Lebar(cm)", false));
+            barangInt[4] = Integer.parseInt(getInputStringNumber("Tinggi(cm)", false));
             System.out.print("Apakah Anda ingin mengubah data informasi barang? (y/n): ");
             String jawaban = input.nextLine();
             if (jawaban.equalsIgnoreCase("n")) {
                 b = false;
-            }   
+            }else if (jawaban.equalsIgnoreCase("y")) {
+                b = true;
+            }else {
+                System.out.println("inputan salah");
+            }
         }
         return barangInt;
     }
@@ -208,12 +194,8 @@ public class ekspedisi {
             }
         } while (!pembayaranValid);
     }
-
-    static String generateUniqueCode() {
-        Random random = new Random();
-        int uniqueCode = random.nextInt(10);
-        return String.format("%03d", uniqueCode);
-    }
+    
+    
 
     static void tampilkanMenuTukarVoucher() {
         java.time.LocalDate today = java.time.LocalDate.now();
@@ -268,11 +250,43 @@ public class ekspedisi {
         return voucherCodes[index];
     }
 
+    static String input(String info) {
+        System.out.print(info + " : ");
+        return input.nextLine().trim();
+    }
+
     static int getDiskonPersen(int index) {
         int[] diskonPersen = { 40, 100, 20, 15, 100 };
         return diskonPersen[index];
     }
 
+    static String getInputString(String prompt, boolean allowEmpty) {
+        while (true) {
+            String userInput = input(prompt);
+            if (allowEmpty && userInput.isEmpty())
+                return userInput;
+            if (!userInput.isEmpty())
+                return userInput;
+            System.out.println("Masukan tidak boleh kosong!");
+        }
+    }
+
+    static String getInputStringNumber(String prompt, boolean allowEmpty) {
+        while (true) {
+            String userInput = getInputString(prompt, allowEmpty);
+            if (allowEmpty && userInput.isEmpty())
+                return userInput;
+            if (userInput.matches("[0-9]+"))
+                return userInput;
+            System.out.println("Masukan hanya boleh angka !");
+        }
+    }
+    static String cetakNoResi(){
+        LocalDateTime myDateObj = LocalDateTime.now();  
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");  
+        String formattedDate = myDateObj.format(myFormatObj);  
+        return "62" + formattedDate;    
+    }
     public static void main(String[] args) {
         String clearScreen = ("\033[H\033[2J");
         System.out.println(clearScreen);
@@ -381,30 +395,8 @@ public class ekspedisi {
                         System.out.println();
                     }
                     System.out.println(clearScreen);
-
-                    // Informasi tanggal
-                    System.out.println("Masukkan tanggal pick-up: ");
-                    System.out.print("dd: ");
-                    int day = input.nextInt();
-                    System.out.print("mm: ");
-                    int month = input.nextInt();
-                    System.out.print("yy: ");
-                    int year = input.nextInt();
-                    input.nextLine();
-                    System.out.println(clearScreen);
-
-                    // update no resi
-                    String kode = generateUniqueCode();
-                    String Resi = day + month + year + kode;
-
-                    System.out.println("Silahkan simpan nomor resi anda!");
-                    String noResi = "EKS001" + Resi;
-                    System.out.println("Nomor resi anda adalah: " + noResi);
-                    System.out.println();
-
-                    // info pick up
-                    System.out.println("Silahkan menunggu kurir untuk mengambil paket anda sampai " + (day + 1) + "/"
-                            + month + "/" + year);
+                    System.out.println("No resi anda adalah: "+cetakNoResi());
+                    System.out.println("Silahkan simpan no resi anda");
                     Poin += 10;
 
                 } else if (pilih == 2) {
@@ -437,30 +429,8 @@ public class ekspedisi {
                         System.out.println();
                     }
                     System.out.println(clearScreen);
-
-                    // Informasi tanggal
-                    System.out.println("Masukkan tanggal drop-off: ");
-                    System.out.print("dd: ");
-                    int day = input.nextInt();
-                    System.out.print("mm: ");
-                    int month = input.nextInt();
-                    System.out.print("yy: ");
-                    int year = input.nextInt();
-                    input.nextLine();
-                    System.out.println(clearScreen);
-
-                    // update no resi
-                    String kode = generateUniqueCode();
-                    String Resi = day + month + year + kode;
-
-                    System.out.println("Silahkan simpan nomor resi anda!");
-                    String noResi = "EKS021" + Resi;
-                    System.out.println("Nomor resi anda adalah: " + noResi);
-                    System.out.println();
-
-                    // info drop off
-                    System.out.println("Silahkan letakkan paket anda pada kantor cabang terdekat sampai " + (day + 1)
-                            + "/" + month + "/" + year);
+                    System.out.println("No resi anda adalah: "+cetakNoResi());
+                    System.out.println("Silahkan simpan no resi anda");
                     Poin += 10;
 
                 } else if (pilih == 3) {
