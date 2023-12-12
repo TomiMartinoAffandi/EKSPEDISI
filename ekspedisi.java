@@ -62,29 +62,39 @@ public class ekspedisi {
 
         boolean b = true;
         while (b) {
-            // input informasi barang
             System.out.print("Nama barang: ");
             barangString[0] = input.nextLine();
             System.out.print("Jenis barang: ");
             barangString[1] = input.nextLine();
-            System.out.print("Jumlah(pcs): ");
-            barangInt[0] = input.nextInt();
-            System.out.print("Berat(kg): ");
-            barangInt[1] = input.nextInt();
-            System.out.println("Hitung berat volume");
-            System.out.print("Panjang(cm): ");
-            barangInt[2] = input.nextInt();
-            System.out.print("Lebar(cm): ");
-            barangInt[3] = input.nextInt();
-            System.out.print("Tinggi(cm): ");
-            barangInt[4] = input.nextInt();
-            input.nextLine();
-
+            while (b) {
+                try {
+                    System.out.print("Jumlah(pcs): ");
+                    barangInt[0] = Integer.parseInt(input.nextLine());
+    
+                    System.out.print("Berat(kg): ");
+                    barangInt[1] = Integer.parseInt(input.nextLine());
+    
+                    System.out.println("Hitung berat volume");
+                    System.out.print("Panjang(cm): ");
+                    barangInt[2] = Integer.parseInt(input.nextLine());
+    
+                    System.out.print("Lebar(cm): ");
+                    barangInt[3] = Integer.parseInt(input.nextLine());
+    
+                    System.out.print("Tinggi(cm): ");
+                    barangInt[4] = Integer.parseInt(input.nextLine());
+    
+                    b = false; // Set 'b' to false to exit the loop since all inputs are valid
+                } catch (NumberFormatException e) {
+                    System.out.println("Masukan hanya angka. Silakan coba lagi.");
+                }    
+            }
+        
             System.out.print("Apakah Anda ingin mengubah data informasi barang? (y/n): ");
             String jawaban = input.nextLine();
             if (jawaban.equalsIgnoreCase("n")) {
                 b = false;
-            }
+            }   
         }
         return barangInt;
     }
@@ -129,7 +139,6 @@ public class ekspedisi {
 
     static int tukarPoin(int poin) {
         int p = poin;
-        int[] disc = new int[2];
 
         while (true) {
             System.out.println("poin anda :" + poin);
@@ -160,7 +169,7 @@ public class ekspedisi {
                 System.out.println("Pilihan tidak valid");
             }
         }
-        return disc;
+        return p;
     }
 
     static void pembayaran() {
