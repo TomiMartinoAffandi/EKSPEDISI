@@ -1,4 +1,3 @@
-import java.util.Random;
 import java.util.Scanner;
 import java.time.LocalDateTime;  
 import java.time.format.DateTimeFormatter;  
@@ -171,7 +170,7 @@ public class ekspedisi {
     static void pembayaran() {
         boolean pembayaranValid = false;
         int metodePembayaran;
-        do {
+        while (!pembayaranValid) {
             System.out.println("Pilihan Pembayaran:");
             System.out.println("1. COD (Cash On Delivery)");
             System.out.println("2. Transfer Bank");
@@ -195,13 +194,13 @@ public class ekspedisi {
                 System.out.print("Masukkan CVV: ");
                 int cvv = input.nextInt();
                 input.nextLine();
-                pembayaranValid = true;
                 System.out.print("Pembayaran sukses!");
+                pembayaranValid = true;
+                
             } else {
                 System.out.println("Metode pembayaran tidak valid!");
-                pembayaranValid = false;
             }
-        } while (!pembayaranValid);
+        };
     }
 
     static void tampilkanMenuTukarVoucher() {
@@ -219,7 +218,6 @@ public class ekspedisi {
         System.out.println("|  6. Keluar                                              |");
         System.out.println("|                                                         |\n");
         System.out.println("===========================================================");
-        System.out.print("Pilih opsi tukar voucher:");
     }
 
     static void tukarVoucher(int index, int[] disc) {
@@ -590,14 +588,12 @@ public class ekspedisi {
                     System.out.println(clearScreen);
                 
                 } else if (pilih == 3) {
-                    String[][] provinsi = new String[2][];
-                    provinsi[0] = new String[1]; // asal provinsi
-                    provinsi[1] = new String[1]; // tujuan provinsi
-
+                    String[][] provinsi = new String[2][6];
+                    
                     System.out.print("Asal(Provinsi):");
-                    provinsi[0][0] = input.nextLine();
+                    provinsi[0][5] = input.nextLine();
                     System.out.print("Tujuan(Provinsi):");
-                    provinsi[1][0] = input.nextLine();
+                    provinsi[1][5] = input.nextLine();
                     System.out.println(clearScreen);
 
                     // memanggil fungsi informasiBarang
@@ -605,11 +601,9 @@ public class ekspedisi {
 
                     System.out.println(clearScreen);
 
-                    if (harga == 0) {
-                        harga = hitungBiaya(harga, barangI, provinsi);
-                    }
-
-                    System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
+                    //fungsi hitungBiaya
+                    harga = hitungBiaya(harga, barangI, provinsi);
+                    System.out.println("Total estimasi biaya pengiriman barang anda adalah: Rp." + (harga));
 
                 } else if (pilih == 4) {
                     String[] dropPoints = { "Malang", "Surabaya", "Jakarta", "Madiun", "Jember" };
@@ -673,16 +667,23 @@ public class ekspedisi {
                     // ... (previous code)
 
                 } else if (pilih == 6) {
-                    System.out.println("6. Menu Voucher Claim");
-                    tampilkanMenuTukarVoucher();
-                    System.out.print("Pilih opsi tukar voucher: ");
-                    pilih = input.nextInt();
-                    input.nextLine();
+                    boolean nam = false;
+                    while (!nam) {
+                        System.out.println("6. Menu Voucher Claim");
+                        tampilkanMenuTukarVoucher();
+                        System.out.print("Pilih opsi tukar voucher: ");
+                        pilih = input.nextInt();
+                        input.nextLine();
 
-                    if (pilih >= 0 && pilih < 5) {
-                        tukarVoucher(pilih, disc);
-                    } else {
-                        System.out.println("Pilihan tidak valid.");
+                        pilih-=1;
+                        if (pilih >= 0 && pilih < 5) {
+                            tukarVoucher(pilih, disc);
+                            nam = true;
+                        } else if (pilih == 5){
+                            nam = true;
+                        }else {
+                            System.out.println("Pilihan tidak valid.");
+                        }
                     }
                 } else if (pilih == 7) {
                     String[][] lacakResi = {
@@ -694,30 +695,37 @@ public class ekspedisi {
                             { "EKS0010505050", "Sedang dikirim", "Paket sedang diantar ke alamat tujuan" },
                             { "EKS0210606060", "Terkirim", "Paket telah diterima oleh penerima" }
                     };
-
-                    System.out.print("Masukkan nomor resi yang ingin dilacak: ");
-                    String inputResi = input.nextLine();
-
-                    boolean ditemukan = false;
-                    String status = null, informasi = null;
-
-                    for (int i = 0; i < lacakResi.length; i++) {
-                        if (lacakResi[i][0].equals(inputResi)) {
-                            ditemukan = true;
-                            status = lacakResi[i][1];
-                            informasi = lacakResi[i][2];
+                    
+                    boolean tuju = true;
+                    while (tuju) {
+                        System.out.print("Masukkan nomor resi yang ingin dilacak (ketik 'n' untuk keluar): ");
+                        String inputResi = input.nextLine();
+                        
+                        if (inputResi.equalsIgnoreCase("n")) {
+                            tuju = false;
                             break;
                         }
-                    }
+                        
+                        boolean ditemukan = false;
+                        String status = null, informasi = null;
 
-                    if (ditemukan) {
-                        System.out.println("Status pengiriman: " + status);
-                        System.out.println("Informasi Pengiriman: " + informasi);
-                    } else {
-                        System.out.println("Nomor resi tidak ditemukan. Mohon periksa kembali nomor resi Anda.");
-                    }
+                        for (int i = 0; i < lacakResi.length; i++) {
+                            if (lacakResi[i][0].equals(inputResi)) {
+                                ditemukan = true;
+                                status = lacakResi[i][1];
+                                informasi = lacakResi[i][2];
+                                break;
+                            }
+                        }
+    
+                        if (ditemukan) {
+                            System.out.println("Status pengiriman: " + status);
+                            System.out.println("Informasi Pengiriman: " + informasi);
+                        } else {
+                            System.out.println("Nomor resi tidak ditemukan. Mohon periksa kembali nomor resi Anda.");
+                        }
                     System.out.println();
-
+                    }
                 } else if (pilih == 8) {
                     System.out.println("keluar");
                     System.exit(0);
