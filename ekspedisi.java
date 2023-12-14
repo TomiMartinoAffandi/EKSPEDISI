@@ -45,16 +45,14 @@ public class ekspedisi {
                     }
                 }
             }
-            while (a) {
-                System.out.print("Apakah anda ingin merubah data informasi pengiriman?(y/n): ");
-                String jawaban = input.nextLine();
-                if (jawaban.equalsIgnoreCase("n")) {
-                    a = false;
-                }else if (jawaban.equalsIgnoreCase("y")) {
-                    a = true;
-                }else {
-                    System.out.println("inputan salah");
-                }
+            System.out.print("Apakah anda ingin merubah data informasi pengiriman?(y/n): ");
+            String jawaban = input.nextLine();
+            if (jawaban.equalsIgnoreCase("n")) {
+                a = false;
+            }else if (jawaban.equalsIgnoreCase("y")) {
+                a = true;
+            }else {
+                System.out.println("inputan salah");
             }
         }
         return n;
@@ -77,16 +75,14 @@ public class ekspedisi {
             barangInt[3] = Integer.parseInt(getInputStringNumber("Lebar(cm)", false));
             barangInt[4] = Integer.parseInt(getInputStringNumber("Tinggi(cm)", false));
             
-            while (b) {
-                System.out.print("Apakah anda ingin merubah data informasi barang?(y/n): ");
-                String jawaban = input.nextLine();
-                if (jawaban.equalsIgnoreCase("n")) {
-                    b = false;
-                }else if (jawaban.equalsIgnoreCase("y")) {
-                    b = true;
-                }else {
-                    System.out.println("inputan salah");
-                }
+            System.out.print("Apakah anda ingin merubah data informasi barang?(y/n): ");
+            String jawaban = input.nextLine();
+            if (jawaban.equalsIgnoreCase("n")) {
+                b = false;
+            }else if (jawaban.equalsIgnoreCase("y")) {
+                b = true;
+            }else {
+                System.out.println("inputan salah");
             }
         }
         return n;
