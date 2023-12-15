@@ -1,7 +1,5 @@
 import java.util.Random;
 import java.util.Scanner;
-import java.time.LocalDateTime;  
-import java.time.format.DateTimeFormatter;  
 
 public class ekspedisi {
     static int poin;
@@ -46,13 +44,13 @@ public class ekspedisi {
                     }
                 }
             }
-
-            System.out.print("Apakah anda ingin merubah data informasi pengiriman?(y/n): ");
-            String jawaban = input.nextLine();
-            if (jawaban.equalsIgnoreCase("n")) {
-                a = false;
+           
+                System.out.print("Apakah anda ingin merubah data informasi pengiriman?(y/n): ");
+                String jawaban = input.next();
+                if (jawaban.equalsIgnoreCase("n")) {
+                    a = false;
+                }
             }
-        }
         return identitas;
     }
 
@@ -64,49 +62,79 @@ public class ekspedisi {
 
         boolean b = true;
         while (b) {
-            barangString[0] = getInputString("Nama Barang", false);
-            barangString[1] = getInputString("Jenis Barang", false);
-            barangInt[0] = Integer.parseInt(getInputStringNumber("Jumlah(pcs)", false));
-            barangInt[1] = Integer.parseInt(getInputStringNumber("Berat(kg)", false));
+            // input informasi barang
+            System.out.print("Nama barang: ");
+            barangString[0] = input.nextLine();
+            System.out.print("Jenis barang: ");
+            barangString[1] = input.nextLine();
+            System.out.print("Jumlah(pcs): ");
+            barangInt[0] = input.nextInt();
+            System.out.print("Berat(kg): ");
+            barangInt[1] = input.nextInt();
             System.out.println("Hitung berat volume");
-            barangInt[2] = Integer.parseInt(getInputStringNumber("Panjang(cm)", false));
-            barangInt[3] = Integer.parseInt(getInputStringNumber("Lebar(cm)", false));
-            barangInt[4] = Integer.parseInt(getInputStringNumber("Tinggi(cm)", false));
+            System.out.print("Panjang(cm): ");
+            barangInt[2] = input.nextInt();
+            System.out.print("Lebar(cm): ");
+            barangInt[3] = input.nextInt();
+            System.out.print("Tinggi(cm): ");
+            barangInt[4] = input.nextInt();
+            input.nextLine();
+
             System.out.print("Apakah Anda ingin mengubah data informasi barang? (y/n): ");
-            String jawaban = input.nextLine();
+            String jawaban = input.next();
             if (jawaban.equalsIgnoreCase("n")) {
                 b = false;
-            }else if (jawaban.equalsIgnoreCase("y")) {
-                b = true;
-            }else {
-                System.out.println("inputan salah");
             }
         }
         return barangInt;
     }
 
-    static int hitungBiaya(int harga, int[] barangInt, String[][] identitas) {
-        int biaya = 0;
+    static int hitungBiaya(int n, int[] barangInt, String[][] identitas) {
+        int biaya;
+        int jenLay = jenisLayanan();
+        int beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
 
-        if (barangInt != null && identitas != null) {
-            int jenLay = jenisLayanan();
-            int beratVolume = (barangInt[2] * barangInt[3] * barangInt[4]) / 6000;
-
-            if (beratVolume > barangInt[1]) {
-                biaya = (10000 * beratVolume) + (jenLay * 10);
-                if (!identitas[0][5].equalsIgnoreCase(identitas[1][5])) {
-                    biaya += 5000;
-                }
-            } else {
-                biaya = (10000 * barangInt[1]) + (jenLay * 10);
-                if (!identitas[0][5].equalsIgnoreCase(identitas[1][5])) {
-                    biaya += 5000;
-                }
+        if (beratVolume > barangInt[1]) {
+            biaya = (10000 * beratVolume) + (jenLay * 10);
+            if (!identitas[0][5].equalsIgnoreCase(identitas[1][5])) {
+                biaya += 5000; // Jika beda provinsi
+            }
+        } else {
+            biaya = (10000 * barangInt[1]) + (jenLay * 10);
+            if (!identitas[0][5].equalsIgnoreCase(identitas[1][5])) {
+                biaya += 5000; // Jika beda provinsi
             }
         }
-        return biaya;
-    }
+        System.out.print("apakah anda ingin menggunakan voucher(y/n)?");
+        String pilih = input.nextLine();
+        if (pilih.equalsIgnoreCase("y")) {
+        while (true) {
+                System.out.println("Pilih Voucher :");
+                System.out.println("Poin anda :"+poin);
+                System.out.println("1. Diskon Ongkir 40%(25 poin)");
+                System.out.println("2. Diskon Ongkir 30%(20 poin)");
+                System.out.println("3. Cancel");
+                pilih = input.nextLine();
 
+                if (pilih.equals("1")) {
+                    if (poin >= 25) {
+                        n*=0.4;
+                    }else
+                        System.out.println("anda tidak memenuhi syarat");
+                }else if (pilih.equals("2")) {
+                    if (poin >= 20) {
+                        biaya*=0.3;
+                    }else
+                        System.out.println("anda tidak memenuhi syarat");
+                }else if (pilih.equals("3")) {
+                    break;
+                }
+            } 
+        }
+        System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (biaya));
+        //pembayaran
+    return biaya;
+}
     static int jenisLayanan() {
         while (true) {
             System.out.print("Pilih jenis layanan pengiriman (Standard/Reguler/Express): ");
@@ -125,6 +153,7 @@ public class ekspedisi {
 
     static int tukarPoin(int poin) {
         int p = poin;
+        int[] disc = new int[2];
 
         while (true) {
             System.out.println("poin anda :" + poin);
@@ -134,28 +163,27 @@ public class ekspedisi {
             System.out.println("5. Exit");
 
             System.out.print("Pilih pilihan tukar poin: ");
-            int pilih = input.nextInt();
-            input.nextLine();
+            String pilih = input.nextLine();
 
-            if (pilih == 1) {
+            if (pilih.equals("1")) {
                 if (p >= 5000000) {
                     System.out.println("selamat anda mendapat Iphone 14 Pro Max");
                     p -= 5000000;
                 } else
                     System.out.println("poin anda tidak mencukupi");
-            } else if (pilih == 2) {
+            } else if (pilih.equals("2")) {
                 if (p >= 10000000) {
                     System.out.println("selamat anda mendapat Macbook A1");
                     p -= 10000000;
                 } else
                     System.out.println("poin anda tidak mencukupi");
-            } else if (pilih == 3) {
+            } else if (pilih.equals("3")) {
                 break;
             } else {
                 System.out.println("Pilihan tidak valid");
             }
         }
-        return p;
+        return disc;
     }
 
     static void pembayaran() {
@@ -194,8 +222,11 @@ public class ekspedisi {
             }
         } while (!pembayaranValid);
     }
-    
-    
+    static String generateUniqueCode() {
+        Random random = new Random();
+        int uniqueCode = random.nextInt(10);
+        return String.format("%03d", uniqueCode);
+    }
 
     static void tampilkanMenuTukarVoucher() {
         java.time.LocalDate today = java.time.LocalDate.now();
@@ -250,48 +281,16 @@ public class ekspedisi {
         return voucherCodes[index];
     }
 
-    static String input(String info) {
-        System.out.print(info + " : ");
-        return input.nextLine().trim();
-    }
-
     static int getDiskonPersen(int index) {
         int[] diskonPersen = { 40, 100, 20, 15, 100 };
         return diskonPersen[index];
     }
 
-    static String getInputString(String prompt, boolean allowEmpty) {
-        while (true) {
-            String userInput = input(prompt);
-            if (allowEmpty && userInput.isEmpty())
-                return userInput;
-            if (!userInput.isEmpty())
-                return userInput;
-            System.out.println("Masukan tidak boleh kosong!");
-        }
-    }
-
-    static String getInputStringNumber(String prompt, boolean allowEmpty) {
-        while (true) {
-            String userInput = getInputString(prompt, allowEmpty);
-            if (allowEmpty && userInput.isEmpty())
-                return userInput;
-            if (userInput.matches("[0-9]+"))
-                return userInput;
-            System.out.println("Masukan hanya boleh angka !");
-        }
-    }
-    static String cetakNoResi(){
-        LocalDateTime myDateObj = LocalDateTime.now();  
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");  
-        String formattedDate = myDateObj.format(myFormatObj);  
-        return "62" + formattedDate;    
-    }
     public static void main(String[] args) {
         String clearScreen = ("\033[H\033[2J");
         System.out.println(clearScreen);
 
-        String username, passwrod;
+        String pilih, username, passwrod;
         boolean berhasilLogin = false;
         int jenLay = 0, Poin = 0, harga = 0, voucher = 0;
         String[][] user = new String[1][2];
@@ -304,23 +303,22 @@ public class ekspedisi {
             System.out.println("1. Sign in");
             System.out.println("Exit");
             System.out.print("pilih menu : ");
-            int pilih = input.nextInt();
-            input.nextLine();
+            pilih = input.nextLine();
             System.out.println(clearScreen);
-            // while (true) {
-            if (pilih == 1) {
-                System.out.print("Masukan username :");
-                username = input.nextLine();
-                System.out.print("Masukan password :");
-                passwrod = input.nextLine();
-                for (int i = 0; i < user.length; i++) {
-                    if (username.equals(user[i][0]) && passwrod.equals(user[i][1])) {
-                        berhasilLogin = true;
-                        break;
-                    } else {
-                        System.out.println("Maaf, Username atau Password anda salah");
-                    }
-                }
+            //while (true) {
+                if (pilih.equals("1")) {
+                    System.out.print("Masukan username :");
+                    username = input.nextLine();
+                    System.out.print("Masukan password :");
+                    passwrod = input.nextLine();
+                    for (int i = 0; i < user.length; i++) {
+                        if (username.equals(user[i][0]) && passwrod.equals(user[i][1])) {
+                            berhasilLogin = true;
+                            break;
+                        } else {
+                            System.out.println("Maaf, Username atau Password anda salah");
+                        }
+                    }    
                 System.out.println(clearScreen);
             }
             while (berhasilLogin) {
@@ -335,12 +333,10 @@ public class ekspedisi {
                 System.out.println("8. Exit");
 
                 System.out.print("pilih menu : ");
-                pilih = input.nextInt();
-                input.nextLine();
+                pilih = input.nextLine();
                 System.out.println(clearScreen);
 
-                if (pilih == 1) {
-
+                if (pilih.equals("1")) {
                     System.out.println(clearScreen);
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     // memanggil fungsi informasiPengiriman
@@ -353,53 +349,51 @@ public class ekspedisi {
 
                     System.out.println(clearScreen);
 
-                    System.out.print("Apakah anda ingin menggunakan voucher(y/n): ");
-                    String useVoucher = input.nextLine();
-
-                    int potonganHarga = 0;
-
-                    if (useVoucher.equalsIgnoreCase("y")) {
-                        System.out.print("Masukkan code voucher : ");
-                        String voucherCode = input.nextLine();
-
-                        // Apply discounts based on voucherCode
-                        if ("NEW40".equals(voucherCode)) {
-                            potonganHarga *= 0.4;
-                        } else if ("11FREE".equals(voucherCode)) {
-                            // No discount
-                        } else if ("YEARENDS20".equals(voucherCode)) {
-                            potonganHarga *= 0.2;
-                        } else if ("PRETTY15".equals(voucherCode)) {
-                            potonganHarga *= 0.15;
-                        } else if ("MERDEKA".equals(voucherCode)) {
-                            // No discount
-                        } else {
-                            System.out.println("Maaf, anda salah memasukkan code voucher.");
-                        }
-
-                        System.out.println("Selamat anda mendapatkan potongan sebesar " + potonganHarga);
-                    } else {
-                        System.out.println("Selamat anda mendapatkan potongan sebesar 0");
-                    }
                     // Pemanggilan fungsi hitungBiaya
                     harga = hitungBiaya(harga, barangI, identitas);
+                    if (harga == 0) {
+                        harga = hitungBiaya(harga, barangI, identitas);
+                    }
+
+                    System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga + 5000));
 
                     // memanggil fungsi pembayaran
                     while (true) {
                         System.out.print("Ingin melanjutkan pembayaran? (y/n): ");
-                        String jawaban = input.nextLine();
+                        String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("y")) {
                             pembayaran();
                             break;
-                        }
-                        System.out.println();
                     }
+                    System.out.println();
+                }
                     System.out.println(clearScreen);
-                    System.out.println("No resi anda adalah: "+cetakNoResi());
-                    System.out.println("Silahkan simpan no resi anda");
+
+                    // Informasi tanggal
+                    System.out.println("Masukkan tanggal pick-up: ");
+                    System.out.print("dd: ");
+                    int day = input.nextInt();
+                    System.out.print("mm: ");
+                    int month = input.nextInt();
+                    System.out.print("yy: ");
+                    int year = input.nextInt();
+                    input.nextLine();
+                    System.out.println(clearScreen);
+
+                    // update no resi
+                    String kode = generateUniqueCode();
+                    String Resi = day + month + year + kode;
+
+                    System.out.println("Silahkan simpan nomor resi anda!");
+                    String noResi = "EKS001" + Resi;
+                    System.out.println("Nomor resi anda adalah: " + noResi);
+                    System.out.println();
+
+                    // info pick up
+                    System.out.println("Silahkan menunggu kurir untuk mengambil paket anda sampai " + (day + 1) + "/" + month + "/" + year);
                     Poin += 10;
 
-                } else if (pilih == 2) {
+                } else if (pilih.equals("2")) {
                     System.out.println(clearScreen);
                     System.out.println("Silahkan masukkan informasi pengiriman");
                     // memanggil fungsi informasiPengiriman
@@ -421,19 +415,40 @@ public class ekspedisi {
                     // pemanggilan fungsi pembayaran
                     while (true) {
                         System.out.print("Ingin melanjutkan pembayaran? (y/n): ");
-                        String jawaban = input.nextLine();
+                        String jawaban = input.next();
                         if (jawaban.equalsIgnoreCase("y")) {
                             pembayaran();
                             break;
                         }
                         System.out.println();
-                    }
+                    }   
+                   System.out.println(clearScreen);
+
+                    // Informasi tanggal
+                    System.out.println("Masukkan tanggal drop-off: ");
+                    System.out.print("dd: ");
+                    int day = input.nextInt();
+                    System.out.print("mm: ");
+                    int month = input.nextInt();
+                    System.out.print("yy: ");
+                    int year = input.nextInt();
+                    input.nextLine();
                     System.out.println(clearScreen);
-                    System.out.println("No resi anda adalah: "+cetakNoResi());
-                    System.out.println("Silahkan simpan no resi anda");
+
+                    // update no resi
+                    String kode = generateUniqueCode();
+                    String Resi = day + month + year + kode;
+
+                    System.out.println("Silahkan simpan nomor resi anda!");
+                    String noResi = "EKS021" + Resi;
+                    System.out.println("Nomor resi anda adalah: " + noResi);
+                    System.out.println();
+
+                    // info drop off
+                    System.out.println("Silahkan letakkan paket anda pada kantor cabang terdekat sampai " + (day + 1) + "/" + month + "/" + year);
                     Poin += 10;
 
-                } else if (pilih == 3) {
+                } else if (pilih.equals("3")) {
                     String[][] provinsi = new String[2][];
                     provinsi[0] = new String[1]; // asal provinsi
                     provinsi[1] = new String[1]; // tujuan provinsi
@@ -455,12 +470,11 @@ public class ekspedisi {
 
                     System.out.println("Total biaya pengiriman barang anda adalah: Rp." + (harga));
 
-                } else if (pilih == 4) {
+                } else if (pilih.equals("4")) {
                     String[] dropPoints = { "Malang", "Surabaya", "Jakarta", "Madiun", "Jember" };
                     String[][] branchDetails = {
                             { "Jl. Kalpataru No 89", "Jl. S. Supriadi No.74", "Jl. Bendungan Sutami No. 15" },
-                            { "Jl. Raya Darmo Indah Bar. No.36", "Jl. Dukuh Setro IV No.2",
-                                    "Jl. Urip Sumoharjo No.44" },
+                            { "Jl. Raya Darmo Indah Bar. No.36", "Jl. Dukuh Setro IV No.2","Jl. Urip Sumoharjo No.44" },
                             { "Jl. Mangga Dua Raya 39II", "Jl Pramuka Sari II No.20" },
                             { "Jl. Salak No.6", "Jl. Basuki Rahmad No.4", "Jl. Imam Bonjol" },
                             { "Jl. Sumatra No.75A", "Jl. Basuki Rahmat No.151" }
@@ -471,7 +485,7 @@ public class ekspedisi {
                     while (changeLocation) {
                         System.out.println("Pilih Drop Point Sekitar:");
                         for (int i = 0; i < dropPoints.length; i++) {
-                            System.out.println((i + 1) + ". " + dropPoints[i]);
+                            System.out.println((i + 1 ) + ". " + dropPoints[i]);
                         }
 
                         System.out.print("Masukkan nomor Drop Point yang dipilih (1-" + dropPoints.length + "): ");
@@ -511,31 +525,30 @@ public class ekspedisi {
                             changeLocation = false;
                         }
                     }
-                } else if (pilih == 5) {
+                } else if (pilih.equals("5")) {
                     int disc = tukarPoin(Poin);
                     System.out.println(clearScreen);
                     // ... (previous code)
 
-                } else if (pilih == 6) {
+                } else if (pilih.equals("6")) {
                     System.out.println("6. Menu Voucher Claim");
                     tampilkanMenuTukarVoucher();
                     System.out.print("Pilih opsi tukar voucher: ");
-                    pilih = input.nextInt();
-                    input.nextLine();
+                    pilih = input.nextLine();
+                    int index = Integer.parseInt(pilih) - 1;
 
-                    if (pilih >= 0 && pilih < 5) {
-                        tukarVoucher(pilih, disc);
+                    if (index >= 0 && index < 5) {
+                        tukarVoucher(index, disc);
                     } else {
                         System.out.println("Pilihan tidak valid.");
                     }
-                } else if (pilih == 7) {
+                } else if (pilih.equals("7")) {
                     String[][] lacakResi = {
                             // resi, status, informasi
                             { "EKS0010101010", "Sedang diproses", "Menunggu kurir untuk mengambil paket" },
                             { "EKS0210202020", "Sedang diproses", "Menunggu paket diserahkan ke pihak jasa kirim" },
                             { "EKS0010303030", "Sedang dikirim", "Paket telah sampai di drop point Malang" },
-                            { "EKS0210404040", "Sedang dikirim",
-                                    "Paket sedang dalam perjalanan menuju drop point Surabaya" },
+                            { "EKS0210404040", "Sedang dikirim","Paket sedang dalam perjalanan menuju drop point Surabaya" },
                             { "EKS0010505050", "Sedang dikirim", "Paket sedang diantar ke alamat tujuan" },
                             { "EKS0210606060", "Terkirim", "Paket telah diterima oleh penerima" }
                     };
@@ -563,7 +576,7 @@ public class ekspedisi {
                     }
                     System.out.println();
 
-                } else if (pilih == 8) {
+                } else if (pilih.equals("8")) {
                     System.out.println("keluar");
                     System.exit(0);
                 }
