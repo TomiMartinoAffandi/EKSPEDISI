@@ -1,15 +1,16 @@
 import java.util.Scanner;
 import java.time.LocalDateTime;  
 import java.time.format.DateTimeFormatter;  
+import java.util.ArrayList;
 
 public class ekspedisi {
     static int poin;
     static int counter;
     static int[] disc = new int[100];
     static Scanner input = new Scanner(System.in);
+    static ArrayList<String> lacakResi = new ArrayList<>();
 
     static String[][] informasiPengiriman(String[][] n) {
-        String[] kotaDiterima = { "Malang", "Surabaya", "Jakarta", "Madiun", "Jember" };
         String[] identitasLabels = {
                 "Nama", "Alamat", "Kecamatan", "Kelurahan", "Kota", "Provinsi", "Kode pos", "Nomor Telepon"
         };
@@ -17,31 +18,29 @@ public class ekspedisi {
         boolean a = true;
         while (a) {
             for (int i = 0; i < 2; i++) {
+                System.out.println();
                 System.out.println("Masukkan informasi " + ((i == 0) ? "pengirim" : "penerima")
                         + " (Informasi tidak boleh kosong!):");
 
                 for (int j = 0; j < 8; j++) {
                     if (j == 4) {
-                        boolean valid = false;
-                        do {
-                            System.out.print(identitasLabels[j] + " " + ((i == 0) ? "pengirim" : "penerima")
-                                    + " (Malang/Surabaya/Jakarta/Madiun/Jember): ");
-                            String kota = input.nextLine();
-                            for (String kotaD : kotaDiterima) {
-                                if (kota.equalsIgnoreCase(kotaD)) {
-                                    n[i][j] = kota;
-                                    valid = true;
-                                    break;
-                                }
+                        while (true) {
+                            System.out.println("~~~~~~~~~  Pilihan Kota  ~~~~~~~~~");
+                            System.out.println("|    a. Malang                   |");
+                            System.out.println("|    b. Surabaya                 |");
+                            System.out.println("|    c. Jakarta                  |");
+                            System.out.println("|    d. Madiun                   |");
+                            System.out.println("|    e. Jember                   |");
+                            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                            n[i][j] = getInputString(identitasLabels[j] + " " + ((i == 0) ? "pengirim" : "penerima") + "(a-e)", false);
+                            if (n[i][j].equalsIgnoreCase("a") || n[i][j].equalsIgnoreCase("b") || n[i][j].equalsIgnoreCase("c") || n[i][j].equalsIgnoreCase("d") || n[i][j].equalsIgnoreCase("e")) {
+                                break;
+                            } else {
+                                System.out.println("Inputan salah");
                             }
-                            if (!valid) {
-                                System.out.println(
-                                        "Kota yang dimasukkan tidak valid. Silakan masukkan salah satu dari lima kota yang diizinkan.");
                             }
-                        } while (!valid);
                     } else {
-                        System.out.print(identitasLabels[j] + " " + ((i == 0) ? "pengirim" : "penerima") + ": ");
-                        n[i][j] = input.nextLine();
+                        n[i][j] = getInputString(identitasLabels[j] + " " + ((i == 0) ? "pengirim" : "penerima"), false);
                     }
                 }
             }
@@ -74,6 +73,7 @@ public class ekspedisi {
             barangString[1] = getInputString("Jenis Barang", false);
             barangInt[0] = Integer.parseInt(getInputStringNumber("Jumlah(pcs)", false));
             barangInt[1] = Integer.parseInt(getInputStringNumber("Berat(kg)", false));
+            System.out.println();
             System.out.println("Hitung berat volume");
             barangInt[2] = Integer.parseInt(getInputStringNumber("Panjang(cm)", false));
             barangInt[3] = Integer.parseInt(getInputStringNumber("Lebar(cm)", false));
@@ -119,13 +119,19 @@ public class ekspedisi {
 
     static int jenisLayanan() {
         while (true) {
-            System.out.print("Pilih jenis layanan pengiriman (Standard/Reguler/Express): ");
+            System.out.println("~~~~~~~~~  Layanan yang Tersedia  ~~~~~~~~~");
+            System.out.println("|    a. Standard                          |");
+            System.out.println("|    b. Reguler                           |");
+            System.out.println("|    c. Express                           |");
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        
+            System.out.print("Pilih jenis layanan pengiriman (a-c): ");
             String layanan = input.nextLine();
-            if (layanan.equalsIgnoreCase("Standard")) {
+            if (layanan.equalsIgnoreCase("a")) {
                 return 400;
-            } else if (layanan.equalsIgnoreCase("Reguler")) {
+            } else if (layanan.equalsIgnoreCase("b")) {
                 return 500;
-            } else if (layanan.equalsIgnoreCase("Express")) {
+            } else if (layanan.equalsIgnoreCase("c")) {
                 return 600;
             } else {
                 System.out.println("Jenis layanan tidak valid!");
@@ -177,8 +183,7 @@ public class ekspedisi {
             System.out.println("Pilihan Pembayaran:");
             System.out.println("1. COD (Cash On Delivery)");
             System.out.println("2. Transfer Bank");
-            System.out.print("Pilih metode pembayaran (1/2): ");
-            metodePembayaran = input.nextInt();
+            metodePembayaran = Integer.parseInt(getInputStringNumber("Pilih metode pembayaran (1/2)", false));
 
             if (metodePembayaran == 1) {
                 // Pembayaran menggunakan COD
@@ -186,24 +191,23 @@ public class ekspedisi {
                 break;
             } else if (metodePembayaran == 2) {
                 // Pembayaran menggunakan Transfer Bank
-                input.nextLine();
-                System.out.print("Masukkan jenis Bank(BRI/BNI/others): ");
-                String bank = input.nextLine();
-                System.out.print("Masukkan nomor kartu bank: ");
-                int nomorKartu = input.nextInt();
-                input.nextLine();
-                System.out.print("Masukkan masa aktif kartu (MM/YY): ");
-                String masaAktifKartu = input.nextLine();
-                System.out.print("Masukkan CVV: ");
-                int cvv = input.nextInt();
-                input.nextLine();
-                System.out.print("Pembayaran sukses!");
-                break;
+                System.out.println("~~~~~~~~~  Pilihan Bank  ~~~~~~~~~");
+                System.out.println("|    a. BNI                      |");
+                System.out.println("|    b. BCA                      |");
+                System.out.println("|    b. BRI                      |");
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                String bank = getInputString("Masukkan jenis Bank (a/b/c)", false);
+                    
+                System.out.println("Masukkan No.Rek anda: ");
+                long noRek = input.nextLong(); 
                 
+                System.out.print("Pembayaran sukses!");
+                break; 
             } else {
                 System.out.println("Metode pembayaran tidak valid!");
+                System.out.println();
             }
-        };
+        }
     }
 
     static void tampilkanMenuTukarVoucher() {
@@ -300,6 +304,25 @@ public class ekspedisi {
         String formattedDate = myDateObj.format(myFormatObj);  
         return "62" + formattedDate;    
     }
+    static LocalDateTime convertToLocalDateTime(String resi) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyHHmmss");
+        return LocalDateTime.parse(resi.substring(2), formatter);
+    }
+    static String statusPengiriman(LocalDateTime waktuPembuatanResi) {
+        LocalDateTime waktuSekarang = LocalDateTime.now();
+        long selisihHari = waktuPembuatanResi.until(waktuSekarang, java.time.temporal.ChronoUnit.DAYS);
+
+        if (selisihHari == 0) {
+            return "Sedang diproses";
+        } else if (selisihHari >= 1 && selisihHari <3) {
+            return "Dalam perjalanan";
+        } else if (selisihHari == 3) {
+            return "Paket sedang dikirim ke alamat tujuan";
+        } else {
+            return "Paket telah diterima oleh penerima";
+        }
+    }
+    
     public static void main(String[] args) {
         String clearScreen = ("\033[H\033[2J");
         System.out.println(clearScreen);
@@ -355,9 +378,7 @@ public class ekspedisi {
                 System.out.println("|    8. Exit                      |");
                 System.out.println("=============== MENU ==============");
 
-                System.out.print("pilih menu : ");
-                pilih = input.nextInt();
-                input.nextLine();
+                pilih = Integer.parseInt(getInputStringNumber("Pilih menu", false));
                 System.out.println(clearScreen);
 
                 if (pilih == 1) {
@@ -394,15 +415,13 @@ public class ekspedisi {
                     //voucher
                     boolean A = true;
                     while (A) {
-                        System.out.print("Apakah anda ingin menggunakan voucher(y/n): ");
-                        String useVoucher = input.nextLine();
+                        String useVoucher = getInputString("Apakah anda ingin menggunakan voucher(y/n)", false);
                         double potonganHarga = 0;
 
                         if (useVoucher.equalsIgnoreCase("y")) {
                             boolean kodeBenar = false;
                             while (!kodeBenar) {
-                                System.out.print("Masukkan code voucher (ketik 'n' untuk exit) : ");
-                                String voucherCode = input.nextLine();
+                                String voucherCode = getInputString("Masukkan code voucher (ketik 'n' untuk exit)", false);
                                 // Apply discounts based on voucherCode
                                 if ("NEW40".equals(voucherCode)) {
                                     potonganHarga = harga*0.4;
@@ -444,8 +463,7 @@ public class ekspedisi {
                     // memanggil fungsi pembayaran + cetak resi
                     boolean lanjut = true;
                     while (lanjut) {
-                        System.out.print("Ingin melanjutkan pembayaran? (y/n): ");
-                        String jawaban = input.nextLine();
+                        String jawaban = getInputString("Ingin melanjutkan pembayaran? (y/n)", false);
                         System.out.println(clearScreen);
                         System.out.println("======================================");
                         System.out.println("|              PICK UP               |");
@@ -453,7 +471,14 @@ public class ekspedisi {
                 
                         if (jawaban.equalsIgnoreCase("y")) {
                             pembayaran();
-                            System.out.println("No resi anda adalah: "+cetakNoResi());
+                            //cetak Resi
+                            String noResiBaru = cetakNoResi();
+                            LocalDateTime waktuPembuatanResiBaru = LocalDateTime.now();
+                            statusPengiriman(waktuPembuatanResiBaru);
+                
+                            lacakResi.add(noResiBaru);
+                
+                            System.out.println("Nomor resi anda adalah: " + noResiBaru);
                             System.out.println("Silahkan simpan no resi anda");
                             Poin += 10;
                             break;
@@ -566,8 +591,17 @@ public class ekspedisi {
                 
                         if (jawaban.equalsIgnoreCase("y")) {
                             pembayaran();
-                            System.out.println("No resi anda adalah: "+cetakNoResi());
+                            
+                            //cetak resi
+                            String noResiBaru = cetakNoResi();
+                            LocalDateTime waktuPembuatanResiBaru = LocalDateTime.now();
+                            statusPengiriman(waktuPembuatanResiBaru);
+
+                            lacakResi.add(noResiBaru);
+
+                            System.out.println("Nomor resi anda adalah: "+noResiBaru);
                             System.out.println("Silahkan simpan no resi anda");
+
                             Poin += 10;
                             break;
                         } else if (jawaban.equalsIgnoreCase("n")) {
@@ -591,15 +625,12 @@ public class ekspedisi {
                 } else if (pilih == 3) {
                     String[][] provinsi = new String[2][6];
                     
-                    System.out.print("Asal(Provinsi):");
-                    provinsi[0][5] = input.nextLine();
-                    System.out.print("Tujuan(Provinsi):");
-                    provinsi[1][5] = input.nextLine();
+                    provinsi[0][5] = getInputString("Asal(Provinsi)", false);
+                    provinsi[1][5] = getInputString("Asal(Provinsi)", false);;
                     System.out.println(clearScreen);
 
                     // memanggil fungsi informasiBarang
                     barangI = informasiBarang(new int[5]);
-
                     System.out.println(clearScreen);
 
                     //fungsi hitungBiaya
@@ -638,32 +669,17 @@ public class ekspedisi {
                                 System.out.println((i + 1) + ". " + branches[i]);
                             }
 
-                            System.out.print("Masukkan nomor cabang yang dipilih (1-" + branches.length + "): ");
-                            int selectedBranchIndex = input.nextInt();
-
-                            if (selectedBranchIndex >= 1 && selectedBranchIndex <= branches.length) {
-                                String selectedBranch = branches[selectedBranchIndex - 1];
-                                System.out.println("Apakah anda memilih " + selectedBranch + " (ya/Tidak)");
-                                String confirmationInput = input.next().toLowerCase();
-
-                                if (confirmationInput.equals("ya")) {
-                                    System.out.println("Anda telah memilih " + selectedDropPoint +
-                                            " dengan drop poin " + selectedBranch);
-                                }
-                                System.out.print("Apakah anda ingin mengganti lokasi lain? (ya/Tidak): ");
-                                String changeLocationInput = input.next().toLowerCase();
-                                changeLocation = changeLocationInput.equals("ya");
-                            } else {
-                                System.out.println("Nomor cabang tidak valid.");
-                                changeLocation = false;
-                            }
+                            System.out.print("Apakah anda ingin mengganti lokasi lain? (ya/Tidak): ");
+                            String changeLocationInput = input.next().toLowerCase();
+                            changeLocation = changeLocationInput.equals("ya");
+                           
                         } else {
                             System.out.println("Nomor Drop Point tidak valid.");
                             changeLocation = false;
                         }
                     }
                 } else if (pilih == 5) {
-                    int disc = tukarPoin(Poin);
+                    tukarPoin(Poin);
                     System.out.println(clearScreen);
                     // ... (previous code)
 
@@ -672,9 +688,7 @@ public class ekspedisi {
                     while (!nam) {
                         System.out.println("6. Menu Voucher Claim");
                         tampilkanMenuTukarVoucher();
-                        System.out.print("Pilih opsi tukar voucher: ");
-                        pilih = input.nextInt();
-                        input.nextLine();
+                        pilih =  Integer.parseInt(getInputStringNumber("Pilih opsi tukar voucher", false));
 
                         pilih-=1;
                         if (pilih >= 0 && pilih < 5) {
@@ -687,45 +701,32 @@ public class ekspedisi {
                         }
                     }
                 } else if (pilih == 7) {
-                    String[][] lacakResi = {
-                            // resi, status, informasi
-                            { "62010010101010", "Sedang diproses", "Menunggu kurir untuk mengambil paket" },
-                            { "62010210202020", "Sedang diproses", "Menunggu paket diserahkan ke pihak jasa kirim" },
-                            { "62010010303030", "Sedang dikirim", "Paket telah sampai di drop point Malang" },
-                            { "62010210404040", "Sedang dikirim", "Paket sedang dalam perjalanan menuju drop point Surabaya" },
-                            { "62010010505050", "Sedang dikirim", "Paket sedang diantar ke alamat tujuan" },
-                            { "62010210606060", "Terkirim", "Paket telah diterima oleh penerima" }
-                    };
-                    
                     boolean tuju = true;
                     while (tuju) {
-                        System.out.print("Masukkan nomor resi yang ingin dilacak (ketik 'n' untuk keluar): ");
-                        String inputResi = input.nextLine();
-                        
+                        String inputResi = getInputString("Masukkan nomor resi yang ingin dilacak (ketik 'n' untuk keluar)", false);
+                    
                         if (inputResi.equalsIgnoreCase("n")) {
                             tuju = false;
                             break;
                         }
                         
                         boolean ditemukan = false;
-                        String status = null, informasi = null;
-
-                        for (int i = 0; i < lacakResi.length; i++) {
-                            if (lacakResi[i][0].equals(inputResi)) {
+                        for (String resi : lacakResi) {
+                            if (resi.equals(inputResi)) {
                                 ditemukan = true;
-                                status = lacakResi[i][1];
-                                informasi = lacakResi[i][2];
+                                LocalDateTime waktuPembuatanResi = convertToLocalDateTime(resi);
+                                String status = statusPengiriman(waktuPembuatanResi);
+        
+                                System.out.println("Nomor Resi: " + resi);
+                                System.out.println("Status pengiriman: " + status);
                                 break;
                             }
                         }
-    
-                        if (ditemukan) {
-                            System.out.println("Status pengiriman: " + status);
-                            System.out.println("Informasi Pengiriman: " + informasi);
-                        } else {
-                            System.out.println("Nomor resi tidak ditemukan. Mohon periksa kembali nomor resi Anda.");
+        
+                        if (!ditemukan) {
+                            System.out.println("Nomor resi tidak ditemukan atau tidak sesuai. Mohon periksa kembali nomor resi Anda.");
                         }
-                    System.out.println();
+                        System.out.println();
                     }
                 } else if (pilih == 8) {
                     System.out.println("keluar");
