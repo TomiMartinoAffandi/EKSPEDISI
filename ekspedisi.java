@@ -625,8 +625,8 @@ public class ekspedisi {
                 } else if (pilih == 3) {
                     String[][] provinsi = new String[2][6];
                     
-                    provinsi[0][5] = getInputString("Asal(Provinsi)", false);
-                    provinsi[1][5] = getInputString("Asal(Provinsi)", false);;
+                    provinsi[0][5] = getInputString("Dari(Provinsi)", false);
+                    provinsi[1][5] = getInputString("Ke(Provinsi)", false);;
                     System.out.println(clearScreen);
 
                     // memanggil fungsi informasiBarang
